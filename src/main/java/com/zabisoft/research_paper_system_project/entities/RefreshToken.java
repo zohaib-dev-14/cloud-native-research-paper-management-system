@@ -6,6 +6,7 @@ import jakarta.persistence.Table;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.Date;
 
 @Entity
 @Table(name = "refresh_tokens")
@@ -21,7 +22,7 @@ public class RefreshToken extends BaseEntity {
     @Column(unique = true)
     private String token;
 
-    private LocalDateTime expiresAt;
+    private Date expiresAt;
 
     private boolean isRevoked = false;
 }
