@@ -1,6 +1,7 @@
 package com.zabisoft.research_paper_system_project.config;
 
 
+import com.zabisoft.research_paper_system_project.filter.JWTFilter;
 import com.zabisoft.research_paper_system_project.service.MyUserDetailsService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -16,6 +17,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 
 @Configuration
@@ -23,21 +25,49 @@ import org.springframework.security.web.SecurityFilterChain;
 @EnableMethodSecurity
 public class SecurityConfig {
     private final MyUserDetailsService userDetailsService;
-
-    public SecurityConfig(MyUserDetailsService userDetailsService) {
+    private final JWTFilter jwtFilter;
+    public SecurityConfig(MyUserDetailsService userDetailsService, JWTFilter jwtFilter) {
         this.userDetailsService = userDetailsService;
+        this.jwtFilter = jwtFilter;
     }
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) {
         return httpSecurity.csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(
-                        auth -> auth.requestMatchers("/api/auth/**").permitAll()
-                                .requestMatchers("/api/admin/**").hasRole("ADMIN")
-                                .requestMatchers("/api/user/**").hasRole("USER")
+                        auth -> auth
+
+                                .requestMatchers("/api/v1/auth/**")
+                                .permitAll()
+
+                                .requestMatchers("/api/v1/admin/**")
+                                .hasRole("ADMIN")
+
+                                .requestMatchers("/api/v1/reviews/**")
+                                .hasAnyRole("REVIEWER", "ADMIN")
+
+                                .requestMatchers(
+                                        "/api/v1/papers/upload",
+                                        "/api/v1/papers/my/**"
+                                )
+                                .hasAnyRole("RESEARCHER", "ADMIN")
+
+                                .requestMatchers(
+                                        "/api/v1/questions/**",
+                                        "/api/v1/papers/view/**"
+                                )
+                                .hasAnyRole(
+                                        "READER",
+                                        "RESEARCHER",
+                                        "REVIEWER",
+                                        "ADMIN"
+                                )
+
                                 .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .addFilterAfter(jwtFilter, UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
     }
 
