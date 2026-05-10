@@ -29,4 +29,14 @@ public interface PaperRepository extends JpaRepository<Paper, UUID> {
             @Param("paperStatus") PaperStatus paperStatus,
             Pageable pageable
     );
+
+    @Query("""
+       SELECT p FROM Paper p
+       JOIN FETCH p.researcher r
+       WHERE r.id = :researcherId
+    """)
+    Page<Paper> findByResearcherId(
+            @Param("researcherId") UUID researcherId,
+            Pageable pageable
+    );
 }
