@@ -9,14 +9,17 @@ services:
     environment:
 
         - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/${DB_NAME}
-        - SPRING_DATASOURCE_USERNAME=${DB_USER}
+        - SPRING_DATASOURCE_USERNAME=${DB_USERNAME}
         - SPRING_DATASOURCE_PASSWORD=${DB_PASSWORD}
         - SPRING_JPA_HIBERNATE_DDL-AUTO=update
-        - SPRING_JPA_SHOW-SQL=true
+        - SPRING_JPA_SHOW_SQL=true
         - SPRING_JPA_PROPERTIES_HIBERNATE_FORMAT_SQL=true
 
         - SPRING_DATA_REDIS_HOST=redis
         - SPRING_DATA_REDIS_PORT=${REDIS_PORT}
+        - JWT_SECRET=${SECRET_KEY}
+        - SPRING_SENDGRID_API_KEY=${SENDGRID_API_KEY}
+        - SPRING_SENDGRID_PROXY_HOST=${SPRING_SENDGRID_PROXY_HOST}
 
     depends_on:
       postgres:
@@ -36,7 +39,7 @@ services:
 
     environment:
       - POSTGRES_DB=${DB_NAME}
-      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_USER=${DB_USERNAME}
       - POSTGRES_PASSWORD=${DB_PASSWORD}
 
     ports:
