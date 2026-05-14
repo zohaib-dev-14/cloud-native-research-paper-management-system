@@ -6,8 +6,6 @@ import static com.zabisoft.research_paper_system_project.helper.KeyHelper.*;
 import static com.zabisoft.research_paper_system_project.util.OTPGeneration.generateOTP;
 
 import com.zabisoft.research_paper_system_project.dto.VerifyOTPRequest;
-import com.zabisoft.research_paper_system_project.helper.KeyHelper;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 

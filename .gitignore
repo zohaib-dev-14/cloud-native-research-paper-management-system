@@ -34,3 +34,4 @@ build/
 *.tar
 *.jar
 .env
+*.p12
