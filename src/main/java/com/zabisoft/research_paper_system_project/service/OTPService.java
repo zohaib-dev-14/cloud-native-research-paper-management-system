@@ -1,5 +1,6 @@
 package com.zabisoft.research_paper_system_project.service;
 
+import com.zabisoft.research_paper_system_project.dto.RegisterRequest;
 import com.zabisoft.research_paper_system_project.dto.SendOTPRequest;
 
 import static com.zabisoft.research_paper_system_project.helper.KeyHelper.*;
@@ -19,6 +20,11 @@ public class OTPService {
     public OTPService(EmailService emailService, StringRedisTemplate redisTemplate) {
         this.emailService = emailService;
         this.redisTemplate = redisTemplate;
+    }
+    public void sendRegisterationOTP(RegisterRequest registerRequest) {
+
+        String registerationOTP = registerationKey(registerRequest.getEmail());
+
     }
 
     public String sendOTP(SendOTPRequest sendOTPRequest) {

@@ -12,4 +12,7 @@ public class KeyHelper {
     public static String verifiedKey(String email) {
         return "VERIFIED:" + email;
     }
+    public static String registerationKey(String email) {
+        return "REGISTER:" + email;
+    }
 }
