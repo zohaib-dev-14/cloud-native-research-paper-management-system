@@ -1,84 +1,136 @@
 package com.zabisoft.research_paper_system_project.service;
-
+import com.zabisoft.research_paper_system_project.dto.PendingRegisteration;
 import com.zabisoft.research_paper_system_project.dto.RegisterRequest;
 import com.zabisoft.research_paper_system_project.dto.SendOTPRequest;
-
 import static com.zabisoft.research_paper_system_project.helper.KeyHelper.*;
 import static com.zabisoft.research_paper_system_project.util.OTPGeneration.generateOTP;
-
 import com.zabisoft.research_paper_system_project.dto.VerifyOTPRequest;
+import com.zabisoft.research_paper_system_project.enums.OTPType;
+import com.zabisoft.research_paper_system_project.response.ApiResponse;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.time.Duration;
 import java.util.concurrent.TimeUnit;
 
 @Service
 public class OTPService {
     private final EmailService emailService;
-    private final StringRedisTemplate redisTemplate;
+    private final RedisTemplate<String, Object> redisTemplate;
+    private final StringRedisTemplate stringRedisTemplate;
+    private final PasswordEncoder passwordEncoder;
 
-    public OTPService(EmailService emailService, StringRedisTemplate redisTemplate) {
+    public OTPService(EmailService emailService, RedisTemplate<String, Object> redisTemplate, StringRedisTemplate stringRedisTemplate, PasswordEncoder passwordEncoder)
+    {
         this.emailService = emailService;
         this.redisTemplate = redisTemplate;
+        this.stringRedisTemplate = stringRedisTemplate;
+        this.passwordEncoder = passwordEncoder;
     }
-    public void sendRegisterationOTP(RegisterRequest registerRequest) {
+    public ApiResponse sendRegistrationOTP(RegisterRequest registerRequest) {
 
-        String registerationOTP = registerationKey(registerRequest.getEmail());
+        String registrationKey = registrationKey(registerRequest.getEmail());
+        PendingRegisteration pendingRegisteration = new PendingRegisteration();
+        pendingRegisteration.setName(registerRequest.getName());
+        pendingRegisteration.setEmail(registerRequest.getEmail());
+        pendingRegisteration.setPassword(
+                passwordEncoder.encode(registerRequest.getPassword())
+        );
+        pendingRegisteration.setRole(registerRequest.getRole());
 
+        if(Boolean.TRUE.equals(
+                redisTemplate.hasKey(registrationKey)
+        )) {
+            throw new RuntimeException(
+                    "Registration already pending..."
+            );
+        }
+
+        //hasKey() + set() -> are different and create race conditions so use setIfAbsent
+
+        redisTemplate.opsForValue().setIfAbsent(registrationKey, pendingRegisteration, Duration.ofMinutes(5));
+
+        SendOTPRequest sendOTPRequest = new SendOTPRequest();
+        sendOTPRequest.setEmail(
+                registerRequest.getEmail()
+        );
+        sendOTPRequest.setOtpType(OTPType.REGISTER);
+
+        sendOTP(sendOTPRequest);
+
+        return new ApiResponse(
+                true, "OTP sent successfully"
+        );
+    }
+    public ApiResponse resendRegistrationOTP(SendOTPRequest request) {
+        String registrationKey = registrationKey(request.getEmail());
+        if (!Boolean.TRUE.equals(stringRedisTemplate.hasKey(registrationKey))) {
+            throw new RuntimeException("Registration expired");
+        }
+
+        request.setOtpType(OTPType.REGISTER);
+        resendOTP(request);
+        return new ApiResponse(
+                true,
+                "OTP resent"
+        );
     }
 
-    public String sendOTP(SendOTPRequest sendOTPRequest) {
-        String key = otpKey(sendOTPRequest.getEmail());
+
+    public void sendOTP(SendOTPRequest sendOTPRequest) {
+        String key = otpKey(sendOTPRequest.getEmail(), sendOTPRequest.getOtpType());
 
         // check existing otp
-        String existingOTP = (String) redisTemplate.opsForValue().get(key);
+        String existingOTP = stringRedisTemplate.opsForValue().get(key);
 
         if (existingOTP != null) {
             emailService.sendOtp(sendOTPRequest.getEmail(), existingOTP);
-            redisTemplate.opsForValue().set(key, existingOTP, 5, TimeUnit.MINUTES);
-            return "OTP already sent, enter a valid OTP";
+            stringRedisTemplate.opsForValue().set(key, existingOTP, Duration.ofMinutes(5));
+            throw new RuntimeException("OTP already sent");
         }
 
         String otp = generateOTP();
-        redisTemplate.opsForValue().set(key, otp, 5, TimeUnit.MINUTES);
+        stringRedisTemplate.opsForValue().set(key, otp, Duration.ofMinutes(5));
         emailService.sendOtp(sendOTPRequest.getEmail(), otp);
-        return "New OTP sent, please enter a valid otp";
+
     }
 
-    public String resendOTP(SendOTPRequest sendOTPRequest) {
-        String otpKey = otpKey(sendOTPRequest.getEmail());
-        String resendKey = resendKey(sendOTPRequest.getEmail());
+    public void resendOTP(SendOTPRequest sendOTPRequest) {
+        String otpKey = otpKey(sendOTPRequest.getEmail(), sendOTPRequest.getOtpType());
+        String resendKey = resendKey(sendOTPRequest.getEmail(), sendOTPRequest.getOtpType());
 
-        if (Boolean.TRUE.equals(redisTemplate.hasKey(resendKey))) {
-            return "Wait for 30 second before trying again!";
+        if (Boolean.TRUE.equals(stringRedisTemplate.hasKey(resendKey))) {
+           throw new RuntimeException("Wait 30 seconds before trying again");
         }
-        String otp = (String) redisTemplate.opsForValue().get(otpKey);
+        String otp = stringRedisTemplate.opsForValue().get(otpKey);
         if (otp == null) {
             otp = generateOTP();
-            redisTemplate.opsForValue().set(otpKey, otp, 5, TimeUnit.MINUTES);
+            stringRedisTemplate.opsForValue().set(otpKey, otp, Duration.ofMinutes(5));
         }
-        redisTemplate.opsForValue().set(resendKey, "1", 30, TimeUnit.SECONDS);
-
+        stringRedisTemplate.opsForValue().set(resendKey, "1", Duration.ofSeconds(30));
         emailService.sendOtp(sendOTPRequest.getEmail(), otp);
-        return "OTP resent";
     }
 
-    public String verifyOTP(VerifyOTPRequest verifyOTPRequest) {
-        String key = otpKey(verifyOTPRequest.getEmail());
-        String storedOTP = (String) redisTemplate.opsForValue().get(key);
+    public void verifyOTP(VerifyOTPRequest verifyOTPRequest) {
+        String key = otpKey(verifyOTPRequest.getEmail(), verifyOTPRequest.getOtpType());
+        String storedOTP = stringRedisTemplate.opsForValue().get(key);
 
-        if (storedOTP == null) {
-            return "OTP Expired";
+        if(storedOTP == null) {
+
+            throw new RuntimeException(
+                    "OTP expired"
+            );
         }
 
-        if (storedOTP.equals(verifyOTPRequest.getOtp())) {
-
-            //delete otp
-            redisTemplate.delete(key);
-            redisTemplate.opsForValue().set(verifiedKey(verifyOTPRequest.getEmail()), "true", 1, TimeUnit.HOURS);
-            return "OTP Verified";
+        if(!storedOTP.equals(
+                verifyOTPRequest.getOtp()
+        )) {
+            throw new RuntimeException(
+                    "Invalid OTP"
+            );
         }
-
-        return "Invalid OTP";
+        stringRedisTemplate.delete(key);
     }
 }
