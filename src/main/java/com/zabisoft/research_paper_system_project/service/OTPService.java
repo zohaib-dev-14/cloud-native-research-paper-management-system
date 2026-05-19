@@ -1,44 +1,41 @@
 package com.zabisoft.research_paper_system_project.service;
-import com.zabisoft.research_paper_system_project.dto.PendingRegisteration;
+import com.zabisoft.research_paper_system_project.dto.PendingRegistration;
 import com.zabisoft.research_paper_system_project.dto.RegisterRequest;
 import com.zabisoft.research_paper_system_project.dto.SendOTPRequest;
 import static com.zabisoft.research_paper_system_project.helper.KeyHelper.*;
 import static com.zabisoft.research_paper_system_project.util.OTPGeneration.generateOTP;
 import com.zabisoft.research_paper_system_project.dto.VerifyOTPRequest;
 import com.zabisoft.research_paper_system_project.enums.OTPType;
+import com.zabisoft.research_paper_system_project.repositories.UserRepository;
 import com.zabisoft.research_paper_system_project.response.ApiResponse;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.Duration;
-import java.util.concurrent.TimeUnit;
 
 @Service
+@RequiredArgsConstructor
 public class OTPService {
     private final EmailService emailService;
     private final RedisTemplate<String, Object> redisTemplate;
     private final StringRedisTemplate stringRedisTemplate;
     private final PasswordEncoder passwordEncoder;
-
-    public OTPService(EmailService emailService, RedisTemplate<String, Object> redisTemplate, StringRedisTemplate stringRedisTemplate, PasswordEncoder passwordEncoder)
-    {
-        this.emailService = emailService;
-        this.redisTemplate = redisTemplate;
-        this.stringRedisTemplate = stringRedisTemplate;
-        this.passwordEncoder = passwordEncoder;
-    }
+    private final UserRepository userRepository;
     public ApiResponse sendRegistrationOTP(RegisterRequest registerRequest) {
 
-        String registrationKey = registrationKey(registerRequest.getEmail());
-        PendingRegisteration pendingRegisteration = new PendingRegisteration();
+
+        PendingRegistration pendingRegisteration = new PendingRegistration();
         pendingRegisteration.setName(registerRequest.getName());
         pendingRegisteration.setEmail(registerRequest.getEmail());
         pendingRegisteration.setPassword(
                 passwordEncoder.encode(registerRequest.getPassword())
         );
         pendingRegisteration.setRole(registerRequest.getRole());
+
+        String registrationKey = registrationKey(registerRequest.getEmail());
 
         if(Boolean.TRUE.equals(
                 redisTemplate.hasKey(registrationKey)
@@ -66,7 +63,7 @@ public class OTPService {
     }
     public ApiResponse resendRegistrationOTP(SendOTPRequest request) {
         String registrationKey = registrationKey(request.getEmail());
-        if (!Boolean.TRUE.equals(stringRedisTemplate.hasKey(registrationKey))) {
+        if (!Boolean.TRUE.equals(redisTemplate.hasKey(registrationKey))) {
             throw new RuntimeException("Registration expired");
         }
 
@@ -74,11 +71,44 @@ public class OTPService {
         resendOTP(request);
         return new ApiResponse(
                 true,
-                "OTP resent"
+                "OTP resent successfully"
         );
     }
 
+    public ApiResponse forgotPasswordOTP(SendOTPRequest sendOTPRequest) {
+        if (!userRepository.existsByEmail(sendOTPRequest.getEmail())) {
+            throw new RuntimeException("User doesn't exist");
+        }
+        sendOTPRequest.setOtpType(OTPType.FORGOT_PASSWORD);
+        sendOTP(sendOTPRequest);
+        return new ApiResponse(
+                true,
+                "OTP sent successfully"
+        );
+    }
 
+    public ApiResponse resendForgotPasswordOTP(SendOTPRequest sendOTPRequest) {
+        if (!userRepository.existsByEmail(sendOTPRequest.getEmail())) {
+            throw new RuntimeException("User doesn't exist");
+        }
+        sendOTPRequest.setOtpType(OTPType.FORGOT_PASSWORD);
+         resendOTP(sendOTPRequest);
+         return new ApiResponse(
+                 true,
+                 "OTP resent successfully"
+         );
+    }
+
+    public ApiResponse verifyForgotPasswordOTP(VerifyOTPRequest verifyOTPRequest) {
+        verifyOTPRequest.setOtpType(OTPType.FORGOT_PASSWORD);
+        verifyOTP(verifyOTPRequest);
+        String resetAllowedKey = resetAllowedKey(verifyOTPRequest.getEmail());
+        stringRedisTemplate.opsForValue().set(resetAllowedKey, "true", Duration.ofMinutes(10));
+        return new ApiResponse(
+                true,
+                "OTP verified successfully"
+        );
+    }
     public void sendOTP(SendOTPRequest sendOTPRequest) {
         String key = otpKey(sendOTPRequest.getEmail(), sendOTPRequest.getOtpType());
 
@@ -87,13 +117,13 @@ public class OTPService {
 
         if (existingOTP != null) {
             emailService.sendOtp(sendOTPRequest.getEmail(), existingOTP);
-            stringRedisTemplate.opsForValue().set(key, existingOTP, Duration.ofMinutes(5));
-            throw new RuntimeException("OTP already sent");
+            return;
         }
 
         String otp = generateOTP();
-        stringRedisTemplate.opsForValue().set(key, otp, Duration.ofMinutes(5));
+        stringRedisTemplate.opsForValue().setIfAbsent(key, otp, Duration.ofMinutes(5));
         emailService.sendOtp(sendOTPRequest.getEmail(), otp);
+
 
     }
 

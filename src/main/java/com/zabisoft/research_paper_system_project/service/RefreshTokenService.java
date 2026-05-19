@@ -3,6 +3,7 @@ package com.zabisoft.research_paper_system_project.service;
 import com.zabisoft.research_paper_system_project.entities.RefreshToken;
 import com.zabisoft.research_paper_system_project.repositories.RefreshTokenRepository;
 import com.zabisoft.research_paper_system_project.util.DateUtil;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -16,6 +17,7 @@ public class RefreshTokenService {
         this.refreshTokenRepository = refreshTokenRepository;
     }
 
+    @Transactional
    public RefreshToken createRefreshToken(String email) {
         refreshTokenRepository.deleteByEmail(email);
 

@@ -29,4 +29,10 @@ public class KeyHelper {
                 + ":"
                 + email;
     }
+
+    public static String resetAllowedKey(
+            String email
+    ) {
+        return "RESET_ALLOWED:" + email;
+    }
 }
