@@ -3,6 +3,8 @@ package com.zabisoft.research_paper_system_project.repositories;
 import com.zabisoft.research_paper_system_project.entities.Paper;
 import com.zabisoft.research_paper_system_project.entities.Review;
 import com.zabisoft.research_paper_system_project.entities.User;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -20,8 +22,9 @@ public interface ReviewRepository extends JpaRepository<Review, UUID> {
        JOIN FETCH r.paper
        WHERE r.paper = :paper
     """)
-    List<Review> findByPaper(
-            @Param("paper") Paper paper
+    Page<Review> findByPaper(
+            @Param("paper") Paper paper,
+            Pageable pageable
     );
 
 
@@ -33,4 +36,15 @@ public interface ReviewRepository extends JpaRepository<Review, UUID> {
        WHERE r.reviewer = :reviewer
     """)
     List<Review> findByReviewer(@Param("reviewer") User reviewer);
+
+
+
+    boolean existsByPaperAndReviewer(
+            Paper paper,
+            User reviewer
+    );
+
+    List<Review> findAllByPaper(
+            Paper paper
+    );
 }

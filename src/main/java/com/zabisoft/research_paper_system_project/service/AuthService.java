@@ -18,6 +18,8 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Objects;
+
 import static com.zabisoft.research_paper_system_project.helper.KeyHelper.*;
 
 @Service
@@ -133,7 +135,7 @@ public class AuthService {
     // 🔥 LOGIN
     public AuthResponse login(
             LoginRequest request
-    ) throws AuthenticationException {
+    ) throws AuthenticationException{
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         request.getEmail(),
@@ -144,12 +146,14 @@ public class AuthService {
            User user =  userRepository.findByEmail(request.getEmail()).orElseThrow(
                    () -> new RuntimeException("User Not Exists")
            );
+
            String accessToken = jwtService.generateToken(user.getEmail(), user.getRole().name());
            RefreshToken refreshToken = refreshTokenService.createRefreshToken(user.getEmail());
-           return new AuthResponse(
-                   accessToken,
-                   refreshToken.getToken()
-           );
+
+        return new AuthResponse(
+                accessToken,
+                refreshToken.getToken()
+        );
     }
    //* Refresh Token
     public AuthResponse refreshToken(

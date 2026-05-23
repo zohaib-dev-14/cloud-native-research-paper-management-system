@@ -47,11 +47,11 @@ public class JWTService {
     }
 
     // extract role from jwt token
-    public String extractRole(String token) {
+    public String extractUserName(String token) {
         return extractClaim(token, Claims::getSubject);
     }
     // extract username from jwt token
-    public String extractUserName(String token) {
+    public String extractRole(String token) {
         return extractAllClaims(token).get("role", String.class);
     }
 

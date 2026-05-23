@@ -50,7 +50,7 @@ public class SecurityConfig {
                                 .hasAnyRole("REVIEWER", "ADMIN")
 
                                 .requestMatchers(
-                                        "/api/v1/papers/upload",
+                                        "/api/v1/papers/**",
                                         "/api/v1/papers/my/**"
                                 )
                                 .hasAnyRole("RESEARCHER", "ADMIN")
@@ -65,16 +65,16 @@ public class SecurityConfig {
                                         "REVIEWER",
                                         "ADMIN"
                                 )
+                                .requestMatchers("/api/v1/files/**")
+                                .permitAll()
                                 .requestMatchers(
                                         "/v3/api-docs/**",
                                         "/swagger-ui/**",
                                         "/swagger-ui.html"
-                                ).authenticated()
-
+                                ).permitAll()
                                 .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .addFilterAfter(jwtFilter, UsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
     }
@@ -94,7 +94,6 @@ public class SecurityConfig {
     }
 
     @Bean
-
     public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) {
         return configuration.getAuthenticationManager();
     }

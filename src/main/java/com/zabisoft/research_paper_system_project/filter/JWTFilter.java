@@ -35,45 +35,9 @@ public class JWTFilter extends OncePerRequestFilter {
             @NonNull FilterChain filterChain
     ) throws ServletException, IOException {
 
-//        String authHeader = request.getHeader("Authorization");
-//        String token = null;
-//        String email = null;
-
         String authHeader = request.getHeader("Authorization");
         String email = null;
         String token = null;
-
-//        if (authHeader != null && authHeader.startsWith("Bearer ")) {
-//            token = authHeader.substring(7);
-//            email = jwtService.extractUserName(token);
-//        }
-
-//        if (authHeader != null && authHeader.startsWith("Bearer ")) {
-//            token = authHeader.substring(7);
-//            email = jwtService.extractUserName(token);
-//        }
-//
-//            if (email != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-//
-//            UserDetails userDetails = userDetailsService.loadUserByUsername(email);
-//
-//            if (jwtService.validateToken(token, userDetails.getUsername())) {
-//                String role = jwtService.extractRole(token);
-//                UsernamePasswordAuthenticationToken authToken =
-//                        new UsernamePasswordAuthenticationToken(
-//                                userDetails,
-//                                null,
-//                                List.of(
-//                                        new SimpleGrantedAuthority("ROLE_" + role)
-//                                )
-//                        );
-//                authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-//                SecurityContextHolder.getContext().setAuthentication(authToken);
-//            }
-//
-//
-//        }
-//        filterChain.doFilter(request, response);
 
         if (authHeader != null && authHeader.startsWith("Bearer ")) {
             token = authHeader.substring(7);

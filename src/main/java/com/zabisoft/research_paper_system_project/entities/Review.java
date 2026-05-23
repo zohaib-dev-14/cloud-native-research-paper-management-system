@@ -1,8 +1,11 @@
 package com.zabisoft.research_paper_system_project.entities;
 
+import com.zabisoft.research_paper_system_project.enums.ReviewDecision;
 import com.zabisoft.research_paper_system_project.enums.ReviewStatus;
 import jakarta.persistence.*;
 import lombok.*;
+
+import java.util.Enumeration;
 
 @Entity
 @Table(name = "reviews")
@@ -28,4 +31,8 @@ public class Review extends BaseEntity{
 
     @Enumerated(EnumType.STRING)
     private ReviewStatus status;
+
+
+    @Enumerated(EnumType.STRING)
+    private ReviewDecision reviewDecision;
 }

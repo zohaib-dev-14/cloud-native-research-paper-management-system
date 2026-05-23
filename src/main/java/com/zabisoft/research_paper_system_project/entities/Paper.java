@@ -52,4 +52,10 @@ public class Paper extends BaseEntity{
 
     @Enumerated(EnumType.STRING)
     private Expertise domain;
+
+    @Column(nullable = false)
+    private String normalizedTitle;
+
+    @Column(columnDefinition = "TEXT", nullable = false)
+    private String normalizedAbstractText;
 }
