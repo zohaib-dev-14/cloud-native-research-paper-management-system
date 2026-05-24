@@ -1,9 +1,10 @@
 package com.zabisoft.research_paper_system_project.controller;
 
 import com.zabisoft.research_paper_system_project.dto.ReviewRequest;
-import com.zabisoft.research_paper_system_project.interfaces.ReviewerService;
+import com.zabisoft.research_paper_system_project.interfaces.ReviewService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
@@ -11,9 +12,12 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/api/v1/reviews")
 @AllArgsConstructor
+@PreAuthorize(
+        "hasAnyRole('ADMIN', 'REVIEWER')"
+)
 public class ReviewerController {
 
-    private final ReviewerService reviewerService;
+    private final ReviewService reviewService;
     @GetMapping("/papers")
     public ResponseEntity<?> getAssignedPapers(
             @RequestParam(defaultValue = "0")
@@ -22,7 +26,7 @@ public class ReviewerController {
             int size
     ) {
         return ResponseEntity.ok(
-                reviewerService.getAssignedPapers(page, size)
+                reviewService.getAssignedPapers(page, size)
         );
     }
 
@@ -31,7 +35,7 @@ public class ReviewerController {
             @PathVariable UUID assignmentId
             ) {
         return ResponseEntity.ok(
-                reviewerService.getAssignmentById(assignmentId)
+                reviewService.getAssignmentById(assignmentId)
         );
     }
     @PatchMapping("/assignments/{assignmentId}/start")
@@ -39,7 +43,7 @@ public class ReviewerController {
             @PathVariable
             UUID assignmentId
     ) {
-        reviewerService.startReview(assignmentId);
+        reviewService.startReview(assignmentId);
         return ResponseEntity.ok(
                 "Review started successfully"
         );
@@ -50,8 +54,21 @@ public class ReviewerController {
             @RequestBody
             ReviewRequest request
     ) {
-        return ResponseEntity.ok(reviewerService.submitReview(request));
+        return ResponseEntity.ok(reviewService.submitReview(request));
     }
 
+
+    @GetMapping("/history")
+    public ResponseEntity<?> getReviewHistory(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "5") int size
+    ) {
+        return ResponseEntity.ok(
+                reviewService.getReviewHistory(
+                        page,
+                        size
+                )
+        );
+    }
 
 }

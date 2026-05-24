@@ -24,7 +24,8 @@ public class PaperController {
 
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<?> createPaper(
-            @ModelAttribute @Valid CreatePaperRequest createPaperRequest) {
+            @ModelAttribute @Valid CreatePaperRequest createPaperRequest
+    ) {
         return ResponseEntity.status(201).body(paperService.createPaper(createPaperRequest));
     }
 

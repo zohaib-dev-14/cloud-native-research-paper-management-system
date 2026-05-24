@@ -1,15 +1,12 @@
 package com.zabisoft.research_paper_system_project.interfaces;
 
 import com.zabisoft.research_paper_system_project.dto.ReviewRequest;
-import com.zabisoft.research_paper_system_project.response.AssignedPaperResponse;
-import com.zabisoft.research_paper_system_project.response.PageResponse;
-import com.zabisoft.research_paper_system_project.response.ReviewResponse;
-import com.zabisoft.research_paper_system_project.response.ReviewerResponse;
+import com.zabisoft.research_paper_system_project.response.*;
 
 import java.util.UUID;
 
 
-public interface ReviewerService {
+public interface ReviewService {
     PageResponse<AssignedPaperResponse> getAssignedPapers(
             int page,
             int size
@@ -26,5 +23,10 @@ public interface ReviewerService {
 
     ReviewResponse submitReview(
             ReviewRequest request
+    );
+
+    PageResponse<ReviewerHistoryResponse> getReviewHistory(
+            int page,
+            int size
     );
 }

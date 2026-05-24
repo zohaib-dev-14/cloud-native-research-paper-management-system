@@ -8,13 +8,10 @@ import com.zabisoft.research_paper_system_project.entities.User;
 import com.zabisoft.research_paper_system_project.enums.AssignmentStatus;
 import com.zabisoft.research_paper_system_project.enums.ReviewStatus;
 import com.zabisoft.research_paper_system_project.interfaces.AuthenticatedUserService;
-import com.zabisoft.research_paper_system_project.interfaces.ReviewerService;
+import com.zabisoft.research_paper_system_project.interfaces.ReviewService;
 import com.zabisoft.research_paper_system_project.repositories.AssignmentRepository;
 import com.zabisoft.research_paper_system_project.repositories.ReviewRepository;
-import com.zabisoft.research_paper_system_project.response.AssignedPaperResponse;
-import com.zabisoft.research_paper_system_project.response.PageResponse;
-import com.zabisoft.research_paper_system_project.response.ReviewResponse;
-import com.zabisoft.research_paper_system_project.response.ReviewerResponse;
+import com.zabisoft.research_paper_system_project.response.*;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -27,7 +24,7 @@ import java.util.UUID;
 
 @Service
 @AllArgsConstructor
-public class ReviewerServiceImpl implements ReviewerService {
+public class ReviewServiceImpl implements ReviewService {
     private final AuthenticatedUserService authenticatedUserService;
     private final AssignmentRepository assignmentRepository;
     private final ReviewRepository reviewRepository;
@@ -162,7 +159,21 @@ public class ReviewerServiceImpl implements ReviewerService {
                 .build();
      }
 
- //  private PaperResponse mapToResponse(Paper paper) {
+    @Override
+    public PageResponse<ReviewerHistoryResponse> getReviewHistory(int page, int size) {
+        User currentReviewer = authenticatedUserService.getCurrentUser();
+
+        Pageable pageable = PageRequest.of(page, size);
+
+        Page<Review> reviews = reviewRepository.findByReviewer(currentReviewer, pageable);
+
+        List<ReviewerHistoryResponse> content = reviews.getContent().stream()
+                .map(this::mapToReviewerHistoryResponse).toList();
+
+        return mapToPageResponseRHR(content, reviews);
+    }
+
+    //  private PaperResponse mapToResponse(Paper paper) {
 //        return PaperResponse.builder()
 //                .id(paper.getId())
 //                .title(paper.getTitle())
@@ -187,6 +198,31 @@ public class ReviewerServiceImpl implements ReviewerService {
                .assignmentStatus(assignment.getStatus())
                .paperStatus(assignment.getPaper().getPaperStatus())
                .build();
+    }
+
+    public ReviewerHistoryResponse mapToReviewerHistoryResponse(Review review) {
+        return ReviewerHistoryResponse
+                .builder()
+                .reviewId(review.getId())
+                .paperTitle(review.getPaper().getTitle())
+                .rating(review.getRating())
+                .comments(review.getComments())
+                .reviewDecision(review.getReviewDecision())
+                .reviewStatus(review.getStatus())
+                .build();
+
+    }
+
+    public PageResponse<ReviewerHistoryResponse> mapToPageResponseRHR(List<ReviewerHistoryResponse> content, Page<Review> reviews) {
+        return PageResponse.<ReviewerHistoryResponse>builder()
+                .content(content)
+                .page(reviews.getNumber())
+                .size(reviews.getSize())
+                .totalElements(reviews.getTotalElements())
+                .totalPages(reviews.getTotalPages())
+                .first(reviews.isFirst())
+                .last(reviews.isLast())
+                .build();
     }
 
 }

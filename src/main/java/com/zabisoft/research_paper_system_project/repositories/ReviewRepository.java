@@ -35,7 +35,7 @@ public interface ReviewRepository extends JpaRepository<Review, UUID> {
        JOIN FETCH r.paper
        WHERE r.reviewer = :reviewer
     """)
-    List<Review> findByReviewer(@Param("reviewer") User reviewer);
+    Page<Review> findByReviewer(@Param("reviewer") User reviewer, Pageable pageable);
 
 
 
