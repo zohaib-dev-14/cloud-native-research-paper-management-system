@@ -64,17 +64,6 @@ public interface PaperRepository extends JpaRepository<Paper, UUID> {
             String normalizedAbstractText
     );
 
-    @Query("""
-     SELECT p FROM Paper p
-     JOIN FETCH p.researcher
-     WHERE p.paperStatus = :status
-     """)
-
-    Page<Paper> findByPaperStatus(
-            @Param("status")
-            PaperStatus paperStatus,
-            Pageable pageable
-    );
 
 
     Page<Paper> findByResearcherIdAndPaperStatus(
@@ -82,6 +71,18 @@ public interface PaperRepository extends JpaRepository<Paper, UUID> {
             PaperStatus status,
             Pageable pageable
     );
+
+    @Query("""
+     SELECT p FROM Paper p
+     JOIN FETCH p.researcher
+     WHERE p.paperStatus = :paperStatus
+     """)
+    Page<Paper> findByPaperStatus(
+            @Param("paperStatus")
+            PaperStatus paperStatus,
+            Pageable pageable
+    );
+
 
 
 

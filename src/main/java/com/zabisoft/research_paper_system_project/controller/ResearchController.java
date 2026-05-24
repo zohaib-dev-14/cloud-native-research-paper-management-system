@@ -19,7 +19,7 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/api/v1/papers")
 @PreAuthorize("hasAnyRole('RESEARCHER', 'ADMIN')")
-public class PaperController {
+public class ResearchController {
     private final PaperService paperService;
 
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)

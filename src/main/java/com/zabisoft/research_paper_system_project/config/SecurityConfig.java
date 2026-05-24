@@ -41,8 +41,6 @@ public class SecurityConfig {
                                 .permitAll()
                                 .requestMatchers("/api/v1/otp/**")
                                 .permitAll()
-                                .requestMatchers("/hello/**")
-                                .permitAll()
                                 .requestMatchers("/api/v1/admin/**")
                                 .hasRole("ADMIN")
 
@@ -57,14 +55,8 @@ public class SecurityConfig {
 
                                 .requestMatchers(
                                         "/api/v1/questions/**",
-                                        "/api/v1/papers/view/**"
-                                )
-                                .hasAnyRole(
-                                        "READER",
-                                        "RESEARCHER",
-                                        "REVIEWER",
-                                        "ADMIN"
-                                )
+                                        "/api/v1/show-papers/**"
+                                ).hasAnyRole("REVIEWER", "ADMIN", "READER", "RESEARCHER")
                                 .requestMatchers("/api/v1/files/**")
                                 .permitAll()
                                 .requestMatchers(

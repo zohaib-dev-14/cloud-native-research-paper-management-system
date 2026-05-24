@@ -24,7 +24,7 @@ public class FileUploadController {
     @PostMapping("/upload")
     public ResponseEntity<?> uploadFile(
             @RequestParam("file") MultipartFile file
-    ) throws NoSuchAlgorithmException, IOException {
+    ) {
         String filePath = fileStorageService.storeFile(file);
         return ResponseEntity.ok(
                 Map.of (
