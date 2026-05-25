@@ -1,5 +1,6 @@
 package com.zabisoft.research_paper_system_project.service.fileStorageImplementation;
 
+import com.zabisoft.research_paper_system_project.config.S3Config;
 import com.zabisoft.research_paper_system_project.exception.FileStorageException;
 import com.zabisoft.research_paper_system_project.exception.InvalidFileException;
 import com.zabisoft.research_paper_system_project.interfaces.FileStorageService;
@@ -10,6 +11,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import software.amazon.awssdk.core.sync.RequestBody;
+import software.amazon.awssdk.services.s3.S3Client;
+import software.amazon.awssdk.services.s3.model.DeleteObjectRequest;
+import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 
 import java.nio.file.Paths;
 import java.util.UUID;
@@ -21,9 +26,14 @@ import static com.zabisoft.research_paper_system_project.util.FileConstants.MAX_
 public class FileStorageServiceImpl
         implements FileStorageService {
 
-    private final MinioClient minioClient;
+//    private final MinioClient minioClient;
+    private final S3Client s3Client;
 
-    @Value("${minio.bucket-name}")
+//    @Value("${minio.bucket-name}")
+//    private String bucketName;
+
+
+    @Value("${aws.bucket-name}")
     private String bucketName;
 
     @Override
@@ -75,12 +85,24 @@ public class FileStorageServiceImpl
             // unique object key
             String uniqueFileName = UUID.randomUUID() + "-" + cleanFileName;
             // upload object to MinIO
-            minioClient.putObject(PutObjectArgs.builder()
-                    .bucket(bucketName)
-                    .object(uniqueFileName)
-                    .stream(multipartFile.getInputStream(), multipartFile.getSize(), (long) -1)
-                    .contentType(multipartFile.getContentType())
-                    .build()
+//            minioClient.putObject(PutObjectArgs.builder()
+//                    .bucket(bucketName)
+//                    .object(uniqueFileName)
+//                    .stream(multipartFile.getInputStream(), multipartFile.getSize(), (long) -1)
+//                    .contentType(multipartFile.getContentType())
+//                    .build()
+//            );
+
+            s3Client.putObject(
+                    PutObjectRequest.builder()
+                            .bucket(bucketName)
+                            .key(uniqueFileName)
+                            .contentType(multipartFile.getContentType())
+                            .build(),
+                    RequestBody.fromInputStream(
+                            multipartFile.getInputStream(),
+                            multipartFile.getSize()
+                    )
             );
             // return object key
             return uniqueFileName;
@@ -96,10 +118,17 @@ public class FileStorageServiceImpl
             String filePath
     ) {
         try {
-            minioClient.removeObject
-                    (RemoveObjectArgs.builder()
+//            minioClient.removeObject
+//                    (RemoveObjectArgs.builder()
+//                            .bucket(bucketName)
+//                            .object(filePath)
+//                            .build()
+//            );
+
+            s3Client.deleteObject(
+                    DeleteObjectRequest.builder()
                             .bucket(bucketName)
-                            .object(filePath)
+                            .key(filePath)
                             .build()
             );
         } catch (Exception e) {

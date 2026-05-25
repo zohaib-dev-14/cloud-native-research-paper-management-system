@@ -12,7 +12,7 @@ import org.springframework.context.annotation.Configuration;
 import java.net.HttpURLConnection;
 
 
-@Configuration
+//@Configuration
 public class MinioConfig {
 
     @Value("${minio.url}")
