@@ -1,4 +1,4 @@
-name: Deploy to EC2 Server
+name: Deploy to EC2
 
 on:
   push:
@@ -6,85 +6,43 @@ on:
       - main
 
 jobs:
-
   deploy:
     runs-on: ubuntu-latest
 
     steps:
-
-      - name: Checkout Repository
-        uses: actions/checkout@v4
-
-      - name: Deploy to EC2
+      - name: Deploy to EC2 Server
         uses: appleboy/ssh-action@v1.0.3
 
         with:
           host: ${{ secrets.EC2_HOST }}
           username: ubuntu
-          key: ${{ secrets.EC2_SSH_KEY }}
+          key: ${{ secrets.EC2_KEY }}
           port: 22
-
-          timeout: 30m
-          command_timeout: 30m
 
           script: |
 
-            echo "========== CONNECTED TO EC2 =========="
-
             cd ~/research-paper-system-springboot
 
-            echo "========== CURRENT DIRECTORY =========="
-            pwd
-
-            echo "========== CURRENT FILES =========="
-            ls
-
-            echo "========== GIT STATUS =========="
-            git status
-
-            echo "========== PULLING LATEST CODE =========="
+            echo "========== PULL LATEST CODE =========="
             git pull origin main
 
-            echo "========== CURRENT BRANCH =========="
-            git branch
+            echo "========== DOCKER LOGIN =========="
+            sudo docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
 
-            echo "========== DOCKER VERSION =========="
-            sudo docker --version
-
-            echo "========== DOCKER COMPOSE VERSION =========="
-            sudo docker compose version
-
-            echo "========== STOPPING OLD CONTAINERS =========="
+            echo "========== STOP OLD CONTAINERS =========="
             sudo docker compose -f docker-compose.prod.yml down
 
-            echo "========== REMOVING UNUSED CONTAINERS =========="
-            sudo docker container prune -f
+            echo "========== PULL NEW IMAGE =========="
+            sudo docker pull zohaibdev14/research-app:v1
 
-            echo "========== BUILDING NEW IMAGE =========="
-            sudo docker compose -f docker-compose.prod.yml build --progress=plain
-
-            echo "========== STARTING NEW CONTAINERS =========="
+            echo "========== START CONTAINERS =========="
             sudo docker compose -f docker-compose.prod.yml up -d
 
             echo "========== RUNNING CONTAINERS =========="
-            sudo docker ps -a
+            sudo docker ps
 
-            echo "========== DOCKER NETWORKS =========="
-            sudo docker network ls
-
-            echo "========== SPRING BOOT CONTAINER LOGS =========="
-            sudo docker logs springboot-app --tail=200
-
-            echo "========== NGINX CONTAINER LOGS =========="
-            sudo docker logs nginx-reverse-proxy --tail=100
-
-            echo "========== CONTAINER RESOURCE USAGE =========="
-            sudo docker stats --no-stream
-
-            echo "========== CLEANING UNUSED IMAGES =========="
+            echo "========== CLEANUP =========="
             sudo docker image prune -f
-
-            echo "========== DEPLOYMENT FINISHED =========="
 
 
 
