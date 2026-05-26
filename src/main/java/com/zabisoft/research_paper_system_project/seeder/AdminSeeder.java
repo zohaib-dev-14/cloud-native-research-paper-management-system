@@ -33,7 +33,7 @@ public class AdminSeeder
 
         if (!adminExists) {
             User admin = new User();
-            admin.setName("System Admin");
+            admin.setName(adminName);
             admin.setEmail(adminEmail);
             admin.setPassword(passwordEncoder.encode(adminPassword));
             admin.setRole(
