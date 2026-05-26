@@ -729,7 +729,7 @@ The final target architecture introduces true system scaling. It tackles transac
 * **Specialized Indexing Read Model (Elasticsearch Cluster):** Offloads complex, high-volume full-text queries away from RDS relational tables using Change Data Capture (CDC) pipelines to power semantic search on indexed research artifacts.
 
 **Final V2 Enterprise Architecture Diagram:**
-![V2 Enterprise Architecture](./kafka-rag-future-v2-3.0-architecture.png)
+![V2 Enterprise Architecture](./docs/kafka-rag-future-v2-3.0-architecture.png)
 
 # 27. 👨‍💻 Author
 
