@@ -27,13 +27,14 @@ public class FileStorageServiceImpl
         implements FileStorageService {
 
 //    private final MinioClient minioClient;
-    private final S3Client s3Client;
+//    private final S3Client s3Client;
 
+    private MinioClient minioClient;
 //    @Value("${minio.bucket-name}")
 //    private String bucketName;
 
 
-    @Value("${aws.bucket-name}")
+    @Value("${minio.bucket-name}")
     private String bucketName;
 
     @Override
@@ -85,25 +86,25 @@ public class FileStorageServiceImpl
             // unique object key
             String uniqueFileName = UUID.randomUUID() + "-" + cleanFileName;
             // upload object to MinIO
-//            minioClient.putObject(PutObjectArgs.builder()
-//                    .bucket(bucketName)
-//                    .object(uniqueFileName)
-//                    .stream(multipartFile.getInputStream(), multipartFile.getSize(), (long) -1)
-//                    .contentType(multipartFile.getContentType())
-//                    .build()
-//            );
-
-            s3Client.putObject(
-                    PutObjectRequest.builder()
-                            .bucket(bucketName)
-                            .key(uniqueFileName)
-                            .contentType(multipartFile.getContentType())
-                            .build(),
-                    RequestBody.fromInputStream(
-                            multipartFile.getInputStream(),
-                            multipartFile.getSize()
-                    )
+            minioClient.putObject(PutObjectArgs.builder()
+                    .bucket(bucketName)
+                    .object(uniqueFileName)
+                    .stream(multipartFile.getInputStream(), multipartFile.getSize(), (long) -1)
+                    .contentType(multipartFile.getContentType())
+                    .build()
             );
+
+//            s3Client.putObject(
+//                    PutObjectRequest.builder()
+//                            .bucket(bucketName)
+//                            .key(uniqueFileName)
+//                            .contentType(multipartFile.getContentType())
+//                            .build(),
+//                    RequestBody.fromInputStream(
+//                            multipartFile.getInputStream(),
+//                            multipartFile.getSize()
+//                    )
+//            );
             // return object key
             return uniqueFileName;
         } catch (Exception e) {
@@ -118,19 +119,19 @@ public class FileStorageServiceImpl
             String filePath
     ) {
         try {
-//            minioClient.removeObject
-//                    (RemoveObjectArgs.builder()
-//                            .bucket(bucketName)
-//                            .object(filePath)
-//                            .build()
-//            );
-
-            s3Client.deleteObject(
-                    DeleteObjectRequest.builder()
+            minioClient.removeObject
+                    (RemoveObjectArgs.builder()
                             .bucket(bucketName)
-                            .key(filePath)
+                            .object(filePath)
                             .build()
             );
+
+//            s3Client.deleteObject(
+//                    DeleteObjectRequest.builder()
+//                            .bucket(bucketName)
+//                            .key(filePath)
+//                            .build()
+//            );
         } catch (Exception e) {
             throw new RuntimeException("Failed to delete file");
         }
