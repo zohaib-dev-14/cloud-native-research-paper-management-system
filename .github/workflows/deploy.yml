@@ -1,4 +1,4 @@
-name: Deploy Spring Boot App
+name: Deploy to EC2 Server
 
 on:
   push:
@@ -6,15 +6,16 @@ on:
       - main
 
 jobs:
+
   deploy:
     runs-on: ubuntu-latest
 
     steps:
 
-      - name: Checkout code
+      - name: Checkout Repository
         uses: actions/checkout@v4
 
-      - name: Deploy to EC2 Server
+      - name: Deploy Application to EC2
         uses: appleboy/ssh-action@v1.0.3
 
         with:
@@ -23,20 +24,65 @@ jobs:
           key: ${{ secrets.EC2_SSH_KEY }}
           port: 22
 
+          timeout: 30m
+          command_timeout: 30m
+
           script: |
+
+            echo "====================================="
+            echo "CONNECTED TO EC2 SERVER"
+            echo "====================================="
 
             cd ~/research-paper-system-springboot
 
+            echo "====================================="
+            echo "CURRENT DIRECTORY"
+            echo "====================================="
+            pwd
+
+            echo "====================================="
+            echo "PULLING LATEST CODE"
+            echo "====================================="
             git pull origin main
 
+            echo "====================================="
+            echo "STOPPING OLD CONTAINERS"
+            echo "====================================="
             sudo docker compose -f docker-compose.prod.yml down
 
-            sudo docker compose -f docker-compose.prod.yml build
+            echo "====================================="
+            echo "BUILDING NEW DOCKER IMAGE"
+            echo "====================================="
+            sudo docker compose -f docker-compose.prod.yml build --no-cache
 
+            echo "====================================="
+            echo "STARTING NEW CONTAINERS"
+            echo "====================================="
             sudo docker compose -f docker-compose.prod.yml up -d
 
+            echo "====================================="
+            echo "RUNNING CONTAINERS"
+            echo "====================================="
+            sudo docker ps
+
+            echo "====================================="
+            echo "SPRING BOOT LOGS"
+            echo "====================================="
+            sudo docker logs springboot-app --tail=100
+
+            echo "====================================="
+            echo "NGINX LOGS"
+            echo "====================================="
+            sudo docker logs nginx-reverse-proxy --tail=50
+
+            echo "====================================="
+            echo "CLEANING UNUSED IMAGES"
+            echo "====================================="
             sudo docker image prune -f
 
+            echo "====================================="
+            echo "DEPLOYMENT FINISHED SUCCESSFULLY"
+            echo "====================================="
 
 
 
