@@ -525,8 +525,7 @@ docker compose -f docker-compose.dev.yml up --build
 
 ---
 
-## Run Production Environment (ONLY FOR PRODUCTION GRADE SERVERS)
-## FOR LOCAL USE (docker-compose.dev.yml)
+## Run Production Environment (Cloud Deployment)
 
 ```bash
 sudo docker compose -f docker-compose.prod.yml up -d
