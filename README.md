@@ -631,6 +631,36 @@ https://researchpaper.site/swagger-ui.html
 
 ---
 
+## Postman Collection
+
+A complete Postman collection and environment configuration are included for testing all APIs and authentication workflows.
+
+### Included Files
+
+- `docs/postman/ResearchPaperSystem.postman_collection.json`
+- `docs/postman/ResearchPaperSystem.postman_environment.json`
+
+### Features Covered
+
+- JWT Authentication
+- Refresh Token Flow
+- OTP Verification
+- Research Paper Upload
+- Paper Update/Delete
+- Reviewer Workflow
+- Admin Operations
+- Protected Role-Based APIs
+
+### Usage
+
+1. Import the collection into Postman
+2. Import the environment file
+3. Select the environment
+4. Run APIs directly
+
+---
+
+
 # 20. 🐳 Docker Deployment
 
 The project is fully containerized using Docker and Docker Compose.
