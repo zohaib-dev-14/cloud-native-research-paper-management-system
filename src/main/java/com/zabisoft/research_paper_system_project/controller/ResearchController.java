@@ -4,7 +4,9 @@ import com.zabisoft.research_paper_system_project.response.PaperResponse;
 import com.zabisoft.research_paper_system_project.dto.UpdatePaperRequest;
 import com.zabisoft.research_paper_system_project.enums.PaperStatus;
 import com.zabisoft.research_paper_system_project.interfaces.PaperService;
-import com.zabisoft.research_paper_system_project.response.ApiResponse;
+import com.zabisoft.research_paper_system_project.response.GenericApiResponse;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.MediaType;
@@ -19,10 +21,18 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/api/v1/papers")
 @PreAuthorize("hasAnyRole('RESEARCHER', 'ADMIN')")
+@Tag(
+        name = "3. Research Paper APIs",
+        description = "APIs for research paper management."
+)
 public class ResearchController {
     private final PaperService paperService;
 
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @Operation(
+            summary = "Upload Research Paper",
+            description = "Uploads a new research paper."
+    )
     public ResponseEntity<?> createPaper(
             @ModelAttribute @Valid CreatePaperRequest createPaperRequest
     ) {
@@ -30,6 +40,10 @@ public class ResearchController {
     }
 
     @GetMapping("/my")
+    @Operation(
+            summary = "Get My Research Papers",
+            description = "Returns papers uploaded by authenticated user."
+    )
     public ResponseEntity<?> getMyPapers(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
@@ -46,6 +60,10 @@ public class ResearchController {
     }
     @GetMapping("/{paperId}")
 
+    @Operation(
+            summary = "Get Research Paper",
+            description = "Returns research paper details."
+    )
     public ResponseEntity<PaperResponse> getPaperById(
             @PathVariable UUID paperId
             ) {
@@ -54,7 +72,11 @@ public class ResearchController {
 
     @DeleteMapping("/{paperId}")
 
-    public ResponseEntity<ApiResponse> deletePaperById(
+    @Operation(
+            summary = "Delete Research Paper",
+            description = "Deletes research paper."
+    )
+    public ResponseEntity<GenericApiResponse> deletePaperById(
             @PathVariable UUID paperId
     ) {
         return ResponseEntity.status(200).body(
@@ -62,6 +84,10 @@ public class ResearchController {
         );
     }
     @PutMapping("/{paperId}")
+    @Operation(
+            summary = "Update Research Paper",
+            description = "Updates existing research paper."
+    )
     public ResponseEntity<PaperResponse> updatePaper(
             @PathVariable UUID paperId,
             @ModelAttribute

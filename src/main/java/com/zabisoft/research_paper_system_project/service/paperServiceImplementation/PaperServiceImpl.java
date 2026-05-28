@@ -13,7 +13,7 @@ import com.zabisoft.research_paper_system_project.interfaces.AuthenticatedUserSe
 import com.zabisoft.research_paper_system_project.interfaces.FileStorageService;
 import com.zabisoft.research_paper_system_project.interfaces.PaperService;
 import com.zabisoft.research_paper_system_project.repositories.PaperRepository;
-import com.zabisoft.research_paper_system_project.response.ApiResponse;
+import com.zabisoft.research_paper_system_project.response.GenericApiResponse;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -177,7 +177,7 @@ public class PaperServiceImpl implements PaperService {
 
     @Override
     @Transactional
-    public ApiResponse deletePaper(UUID paperId) {
+    public GenericApiResponse deletePaper(UUID paperId) {
         User user = authenticatedUserService.getCurrentUser();
 
         Paper paper = paperRepository.findById(paperId).orElseThrow(
@@ -200,7 +200,7 @@ public class PaperServiceImpl implements PaperService {
 
         paperRepository.delete(paper);
 
-        return new ApiResponse(
+        return new GenericApiResponse(
                 true,
                 "Paper deleted successfully"
         );

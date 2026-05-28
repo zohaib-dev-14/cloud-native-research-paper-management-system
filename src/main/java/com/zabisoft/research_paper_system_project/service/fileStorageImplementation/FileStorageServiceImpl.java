@@ -34,7 +34,10 @@ public class FileStorageServiceImpl
 //    private String bucketName;
 
 
-    @Value("${aws.bucket-name}")
+//    @Value("${aws.bucket-name}")
+//    private String bucketName;
+
+    @Value("${AWS_BUCKET_NAME}")
     private String bucketName;
 
     @Override
@@ -51,7 +54,7 @@ public class FileStorageServiceImpl
         if (multipartFile.isEmpty()) {
             throw new InvalidFileException("File is empty");
         }
-        // max size validatio
+        // max size validation
         if (multipartFile.getSize() > MAX_FILE_SIZE) {
             throw new InvalidFileException(
                     "File size exceeds 10 MB limit"

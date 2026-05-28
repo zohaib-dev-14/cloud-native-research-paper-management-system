@@ -15,11 +15,11 @@ import java.net.HttpURLConnection;
 //@Configuration
 public class MinioConfig {
 
-    @Value("${minio.url}")
+    @Value("${MINIO_URL}")
     private String url;
-    @Value("${minio.username}")
+    @Value("${MINIO_ROOT_USER}")
     private String username;
-    @Value("${minio.password}")
+    @Value("${MINIO_ROOT_PASSWORD}")
     private String password;
     @Bean
     public MinioClient minioClient() {

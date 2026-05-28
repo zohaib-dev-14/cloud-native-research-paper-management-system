@@ -14,28 +14,27 @@ public class SwaggerConfig {
 
     @Bean
     public OpenAPI customOpenAPI() {
-        return new OpenAPI().info(
-          new Info()
-               .title("Research Paper API")
-               .version("1.0")
-               .description("Auth APIs + Research Paper")
+
+        return new OpenAPI()
+
+                .info(new Info()
+                        .title("Cloud-Native Research Paper Management System API")
+                        .version("1.0")
+                        .description("Production-ready backend system using Spring Boot, JWT, Redis, Docker, AWS and CI/CD.")
                 )
-                .addSecurityItem(
-                      new SecurityRequirement().addList("bearerAuth")
-                )
-                .components(
-                new Components().addSecuritySchemes(
-                                        "bearerAuth",
-                 new SecurityScheme().name("bearerAuth")
-                         .type(SecurityScheme.Type.HTTP)
-                         .scheme("bearer")
-                         .bearerFormat("JWT")
-                )
-                ).addServersItem(
-                        new Server()
-                                .url("https://researchpaper.site")
-                                .description("Production Server")
-                )
-                ;
+
+                .addSecurityItem(new SecurityRequirement().addList("Bearer Authentication"))
+
+                .components(new Components()
+                        .addSecuritySchemes(
+                                "Bearer Authentication",
+
+                                new SecurityScheme()
+                                        .name("Authorization")
+                                        .type(SecurityScheme.Type.HTTP)
+                                        .scheme("bearer")
+                                        .bearerFormat("JWT")
+                        )
+                );
     }
 }

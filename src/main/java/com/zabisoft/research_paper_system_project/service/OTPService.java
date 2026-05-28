@@ -7,7 +7,7 @@ import static com.zabisoft.research_paper_system_project.util.OTPGeneration.gene
 import com.zabisoft.research_paper_system_project.dto.VerifyOTPRequest;
 import com.zabisoft.research_paper_system_project.enums.OTPType;
 import com.zabisoft.research_paper_system_project.repositories.UserRepository;
-import com.zabisoft.research_paper_system_project.response.ApiResponse;
+import com.zabisoft.research_paper_system_project.response.GenericApiResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.StringRedisTemplate;
@@ -24,7 +24,7 @@ public class OTPService {
     private final StringRedisTemplate stringRedisTemplate;
     private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
-    public ApiResponse sendRegistrationOTP(RegisterRequest registerRequest) {
+    public GenericApiResponse sendRegistrationOTP(RegisterRequest registerRequest) {
 
 
         PendingRegistration pendingRegisteration = new PendingRegistration();
@@ -57,11 +57,11 @@ public class OTPService {
 
         sendOTP(sendOTPRequest);
 
-        return new ApiResponse(
+        return new GenericApiResponse(
                 true, "OTP sent successfully"
         );
     }
-    public ApiResponse resendRegistrationOTP(SendOTPRequest request) {
+    public GenericApiResponse resendRegistrationOTP(SendOTPRequest request) {
         String registrationKey = registrationKey(request.getEmail());
         if (!Boolean.TRUE.equals(redisTemplate.hasKey(registrationKey))) {
             throw new RuntimeException("Registration expired");
@@ -69,42 +69,42 @@ public class OTPService {
 
         request.setOtpType(OTPType.REGISTER);
         resendOTP(request);
-        return new ApiResponse(
+        return new GenericApiResponse(
                 true,
                 "OTP resent successfully"
         );
     }
 
-    public ApiResponse forgotPasswordOTP(SendOTPRequest sendOTPRequest) {
+    public GenericApiResponse forgotPasswordOTP(SendOTPRequest sendOTPRequest) {
         if (!userRepository.existsByEmail(sendOTPRequest.getEmail())) {
             throw new RuntimeException("User doesn't exist");
         }
         sendOTPRequest.setOtpType(OTPType.FORGOT_PASSWORD);
         sendOTP(sendOTPRequest);
-        return new ApiResponse(
+        return new GenericApiResponse(
                 true,
                 "OTP sent successfully"
         );
     }
 
-    public ApiResponse resendForgotPasswordOTP(SendOTPRequest sendOTPRequest) {
+    public GenericApiResponse resendForgotPasswordOTP(SendOTPRequest sendOTPRequest) {
         if (!userRepository.existsByEmail(sendOTPRequest.getEmail())) {
             throw new RuntimeException("User doesn't exist");
         }
         sendOTPRequest.setOtpType(OTPType.FORGOT_PASSWORD);
          resendOTP(sendOTPRequest);
-         return new ApiResponse(
+         return new GenericApiResponse(
                  true,
                  "OTP resent successfully"
          );
     }
 
-    public ApiResponse verifyForgotPasswordOTP(VerifyOTPRequest verifyOTPRequest) {
+    public GenericApiResponse verifyForgotPasswordOTP(VerifyOTPRequest verifyOTPRequest) {
         verifyOTPRequest.setOtpType(OTPType.FORGOT_PASSWORD);
         verifyOTP(verifyOTPRequest);
         String resetAllowedKey = resetAllowedKey(verifyOTPRequest.getEmail());
         stringRedisTemplate.opsForValue().set(resetAllowedKey, "true", Duration.ofMinutes(10));
-        return new ApiResponse(
+        return new GenericApiResponse(
                 true,
                 "OTP verified successfully"
         );

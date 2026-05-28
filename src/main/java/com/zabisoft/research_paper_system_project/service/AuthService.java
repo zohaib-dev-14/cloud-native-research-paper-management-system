@@ -5,7 +5,7 @@ import com.zabisoft.research_paper_system_project.entities.User;
 import com.zabisoft.research_paper_system_project.enums.Role;
 import com.zabisoft.research_paper_system_project.repositories.RefreshTokenRepository;
 import com.zabisoft.research_paper_system_project.repositories.UserRepository;
-import com.zabisoft.research_paper_system_project.response.ApiResponse;
+import com.zabisoft.research_paper_system_project.response.GenericApiResponse;
 import com.zabisoft.research_paper_system_project.response.AuthResponse;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -17,8 +17,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
-import java.util.Objects;
 
 import static com.zabisoft.research_paper_system_project.helper.KeyHelper.*;
 
@@ -36,7 +34,7 @@ public class AuthService {
     private final PasswordEncoder passwordEncoder;
     private final RefreshTokenRepository refreshTokenRepository;
 
-    public ApiResponse register(RegisterRequest request) {
+    public GenericApiResponse register(RegisterRequest request) {
 
         if (userRepository.existsByEmail(request.getEmail())) {
             throw new RuntimeException("User Already Exists");
@@ -95,7 +93,7 @@ public class AuthService {
     }
 
     @Transactional
-    public ApiResponse resetPassword(ResetPasswordRequest resetPasswordRequest) {
+    public GenericApiResponse resetPassword(ResetPasswordRequest resetPasswordRequest) {
         String resetKey = resetAllowedKey(resetPasswordRequest.getEmail());
         String allowed = stringRedisTemplate.opsForValue().get(resetKey);
         if (allowed == null) {
@@ -124,7 +122,7 @@ public class AuthService {
         stringRedisTemplate.delete(resetKey);
         refreshTokenRepository.deleteByEmail(user.getEmail());
 
-        return new ApiResponse(
+        return new GenericApiResponse(
                 true,
                 "Password reset successfully. Please login again."
         );
@@ -174,10 +172,10 @@ public class AuthService {
     }
 
     @Transactional
-    public ApiResponse logout(LogoutRequest logoutRequest) {
+    public GenericApiResponse logout(LogoutRequest logoutRequest) {
         RefreshToken refreshToken = refreshTokenService.verifyRefreshToken(logoutRequest.getRefreshToken());
         refreshTokenRepository.delete(refreshToken);
-        return new ApiResponse(
+        return new GenericApiResponse(
                 true,
                 "Logout successful"
         );
