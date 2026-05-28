@@ -688,6 +688,12 @@ Nginx is used for:
 
 ---
 
+# 25-a. CI/CD Piepline Github-Actions
+
+![CI/CD Pipeline](docs/screenshots/cicd_githubactions.png)
+
+---
+
 # 26. 🚀 Future Improvements
 
 - Kafka Integration
