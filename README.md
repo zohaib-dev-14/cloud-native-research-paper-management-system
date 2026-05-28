@@ -688,7 +688,7 @@ sudo docker compose -f docker-compose.prod.yml up -d
 ```bash
 sudo docker pull zohaibsaraj/research-app:v1
 ```
-
+![Image Deployed On Docker HUb](docs/screenshots/docker_hub_image.png)
 ---
 
 # 21. 🌍 Domain & HTTPS Setup
@@ -741,11 +741,11 @@ Nginx is used for:
 
 # 25. 🔄 CI/CD Pipeline
 
-![CI/CD Pipeline](docs/screenshots/cicd.png)
+![CI Pipeline](docs/screenshots/cicd.png)
 
 ---
 
-![CD EC2 Server Deployment](docs/screenshots/deployment_EC2_server.png)
+![CD Pipeline EC2 Server Deployment](docs/screenshots/deployment_EC2_server.png)
 
 ---
 
