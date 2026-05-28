@@ -666,25 +666,25 @@ Nginx is used for:
 
 # 22. 🏗️ System Architecture Diagram
 
-![Architecture Diagram](./docs/architecture.png)
+![Architecture Diagram](docs/screenshots/architecture.png)
 
 ---
 
 # 23. 🔐 JWT + Refresh Token Flow
 
-![JWT Flow](./docs/jwt-flow.png)
+![JWT Flow](docs/screenshots/jwt-flow.png)
 
 ---
 
 # 24. ☁️ Infrastructure & Cloud Deployment
 
-![Infrastructure Diagram](./docs/infrastructure.png)
+![Infrastructure Diagram](docs/screenshots/infrastructure.png)
 
 ---
 
 # 25. 🔄 CI/CD Pipeline
 
-![CI/CD Pipeline](./docs/cicd.png)
+![CI/CD Pipeline](docs/screenshots/cicd.png)
 
 ---
 
@@ -717,7 +717,7 @@ Architectural design is an iterative pipeline. Now that the core distributed V1 
 This intermediate phase focuses on optimizing token management latencies. The objective is to migrate stateful Refresh Token persistence from the relational database tier (AWS RDS) to the high-velocity memory tier (AWS ElastiCache Redis). This improves system velocity for token validation requests by leveraging sub-millisecond memory-tier lookups and native TTL vaporization.
 
 **V1.5 Target Auth Flow Diagram:**
-![V1.5 Auth Flow](./docs/v2-jwt-flow.png)
+![V1.5 Auth Flow](docs/screenshots/v2-jwt-flow.png)
 
 ---
 
@@ -730,7 +730,7 @@ The final target architecture introduces true system scaling. It tackles transac
 * **Specialized Indexing Read Model (Elasticsearch Cluster):** Offloads complex, high-volume full-text queries away from RDS relational tables using Change Data Capture (CDC) pipelines to power semantic search on indexed research artifacts.
 
 **Final V2 Enterprise Architecture Diagram:**
-![V2 Enterprise Architecture](./docs/kafka-rag-future-v2-3.0-architecture.png)
+![V2 Enterprise Architecture](docs/screenshots/kafka-rag-future-v2-3.0-architecture.png)
 
 # 27. 👨‍💻 Author
 
