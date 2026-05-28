@@ -357,7 +357,7 @@ PostgreSQL / Redis / AWS S3
 
 # 14-a. ERD FOR CLOUD-NATIVE RESEARCH PAPER SYSTEM PROJECT
 
-![ERD Pipeline](docs/screenshots/erd_rps.png)
+![ERD](docs/screenshots/erd_rps.png)
 
 ---
 ## Architecture Layers
@@ -742,6 +742,10 @@ Nginx is used for:
 # 25. 🔄 CI/CD Pipeline
 
 ![CI/CD Pipeline](docs/screenshots/cicd.png)
+
+---
+
+![CD EC2 Server Deployment](docs/screenshots/deployment_EC2_server.png)
 
 ---
 
