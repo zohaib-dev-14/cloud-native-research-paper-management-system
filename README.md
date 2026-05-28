@@ -332,7 +332,34 @@ PostgreSQL / Redis / AWS S3
 ```
 
 ---
+## ERD OF RESEARCH PAPER SYSTEM
 
+# Workflow Status Enums
+
+## Paper Status
+- SUBMITTED
+- UNDER_REVIEW
+- ACCEPTED
+- REJECTED
+- REVISION
+
+## Processing Status
+- UPLOADED
+- PROCESSING
+- COMPLETED
+
+## User Roles
+- ADMIN
+- RESEARCHER
+- REVIEWER
+- READER
+
+
+# 14-a. ERD FOR CLOUD-NATIVE RESEARCH PAPER SYSTEM PROJECT
+
+![ERD Pipeline](docs/screenshots/erd_rps.png)
+
+---
 ## Architecture Layers
 
 ### Controller Layer
