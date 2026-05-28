@@ -10,7 +10,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
-@Component
+//@Component
 @RequiredArgsConstructor
 public class ReviewerSeeder
         implements CommandLineRunner {
@@ -37,7 +37,7 @@ public class ReviewerSeeder
             admin.setEmail(reviewerEmail);
             admin.setPassword(passwordEncoder.encode(reviewerPassword));
             admin.setRole(
-                    Role.ADMIN
+                    Role.REVIEWER
             );
             admin.setVerified(true);
             userRepository.save(admin);

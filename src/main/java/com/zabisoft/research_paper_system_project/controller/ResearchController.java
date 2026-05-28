@@ -83,10 +83,16 @@ public class ResearchController {
                 paperService.deletePaper(paperId)
         );
     }
-    @PutMapping("/{paperId}")
+    @PutMapping(value = "/{paperId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @Operation(
             summary = "Update Research Paper",
-            description = "Updates existing research paper."
+            description = "Updates existing research paper via multi-part form submission.",
+            requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
+                    content = @io.swagger.v3.oas.annotations.media.Content(
+                            mediaType = MediaType.MULTIPART_FORM_DATA_VALUE,
+                            schema = @io.swagger.v3.oas.annotations.media.Schema(implementation = UpdatePaperRequest.class)
+                    )
+            )
     )
     public ResponseEntity<PaperResponse> updatePaper(
             @PathVariable UUID paperId,
