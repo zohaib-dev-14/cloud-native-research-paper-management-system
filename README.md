@@ -748,7 +748,7 @@ Nginx is used for:
 
 ---
 
-# 25-a. CI/CD Piepline Github-Actions
+# 25-a. CI/CD Pipeline Github-Actions
 
 ![CI/CD Pipeline](docs/screenshots/cicd_githubactions.png)
 
@@ -802,9 +802,9 @@ The final target architecture introduces true system scaling. It tackles transac
 
 Muhammad Zohaib
 
-Software Engineering Student  
+Backend & Cloud Engineering Enthusiast
 
-Junior Java Backend Developer | DevOps & Cloud Enthusiast | DevSecOps Enthusiast
+Junior Backend Engineer | Cloud & DevOps Enthusiast
 
 ---
 
