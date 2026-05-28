@@ -357,7 +357,7 @@ PostgreSQL / Redis / AWS S3
 
 # 14-a. ERD FOR CLOUD-NATIVE RESEARCH PAPER SYSTEM PROJECT
 
-![ERD Pipeline](docs/screenshots/erd_rps.png)
+![ERD](docs/screenshots/erd_rps.png)
 
 ---
 ## Architecture Layers
@@ -631,6 +631,36 @@ https://researchpaper.site/swagger-ui.html
 
 ---
 
+## Postman Collection
+
+A complete Postman collection and environment configuration are included for testing all APIs and authentication workflows.
+
+### Included Files
+
+- `docs/postman/ResearchPaperSystem.postman_collection.json`
+- `docs/postman/ResearchPaperSystem.postman_environment.json`
+
+### Features Covered
+
+- JWT Authentication
+- Refresh Token Flow
+- OTP Verification
+- Research Paper Upload
+- Paper Update/Delete
+- Reviewer Workflow
+- Admin Operations
+- Protected Role-Based APIs
+
+### Usage
+
+1. Import the collection into Postman
+2. Import the environment file
+3. Select the environment
+4. Run APIs directly
+
+---
+
+
 # 20. 🐳 Docker Deployment
 
 The project is fully containerized using Docker and Docker Compose.
@@ -658,7 +688,7 @@ sudo docker compose -f docker-compose.prod.yml up -d
 ```bash
 sudo docker pull zohaibsaraj/research-app:v1
 ```
-
+![Image Deployed On Docker HUb](docs/screenshots/docker_hub_image.png)
 ---
 
 # 21. 🌍 Domain & HTTPS Setup
@@ -711,7 +741,11 @@ Nginx is used for:
 
 # 25. 🔄 CI/CD Pipeline
 
-![CI/CD Pipeline](docs/screenshots/cicd.png)
+![CI Pipeline](docs/screenshots/cicd.png)
+
+---
+
+![CD Pipeline EC2 Server Deployment](docs/screenshots/deployment_EC2_server.png)
 
 ---
 
