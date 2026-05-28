@@ -44,13 +44,15 @@ public class GlobalExceptionHandling {
     }
 
      // generic exception
-    @ExceptionHandler(Exception.class)
-    public ResponseEntity<ErrorResponse> handleGenericException(
-            Exception ex
+
+
+    @ExceptionHandler(RuntimeException.class)
+    public ResponseEntity<ErrorResponse> handleRuntimeException(
+            RuntimeException ex
     ) {
 
         return ResponseEntity
-                .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .badRequest()
                 .body(
                         new ErrorResponse(
                                 false,
@@ -73,6 +75,20 @@ public class GlobalExceptionHandling {
                         )
                 );
     }
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<ErrorResponse> handleGenericException(
+            Exception ex
+    ) {
 
+        return ResponseEntity
+                .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(
+                        new ErrorResponse(
+                                false,
+                                "Something went wrong"
+                        )
+                );
 
-}
+    }
+
+    }
