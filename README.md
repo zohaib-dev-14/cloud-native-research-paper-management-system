@@ -798,6 +798,50 @@ The final target architecture introduces true system scaling. It tackles transac
 **Final V2 Enterprise Architecture Diagram:**
 ![V2 Enterprise Architecture](docs/screenshots/kafka-rag-future-v2-3.0-architecture.png)
 
+
+
+--- 
+
+
+# API Testing Screenshots
+
+## Login
+
+![Login](docs/screenshots/login_page_research_paper_1.png)
+
+---
+
+## Research Paper Listing
+
+![Research Papers](docs/screenshots/get_all_research_papers_for_a_researcher_2.png)
+
+---
+
+## Research Paper Details
+
+![Paper Details](docs/screenshots/get_research_paper_by_paper_id_one_3.png)
+
+---
+
+## Admin Review Queue
+
+![Pending Papers](docs/screenshots/pending_papers_display_research_paper_5.png)
+
+---
+
+## Reviewer Workflow
+
+![Reviews](docs/screenshots/reviews_by_reviewer_research_paper_6.png)
+
+---
+
+## Password Recovery
+
+![OTP](docs/screenshots/forgot_password_otp_send_7.png)
+
+
+--- 
+
 # 27. 👨‍💻 Author
 
 Muhammad Zohaib
