@@ -60,6 +60,7 @@ public class SecurityConfig {
                                 .requestMatchers("/api/v1/files/**")
                                 .permitAll()
                                 .requestMatchers(
+                                        "/",
                                         "/v3/api-docs/**",
                                         "/swagger-ui/**",
                                         "/swagger-ui.html"
