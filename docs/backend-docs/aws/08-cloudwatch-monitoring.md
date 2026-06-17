@@ -508,3 +508,60 @@ Successfully configured:
 Result:
 
 Production-grade observability foundation established for the Research Paper Management System.
+
+
+
+
+# Commands Cheat Sheet
+
+## Download Agent
+
+wget https://s3.amazonaws.com/amazoncloudwatch-agent/ubuntu/amd64/latest/amazon-cloudwatch-agent.deb
+
+Purpose:
+Download latest CloudWatch Agent package.
+
+---
+
+## Install Agent
+
+sudo dpkg -i amazon-cloudwatch-agent.deb
+
+Purpose:
+Install CloudWatch Agent.
+
+---
+
+## Run Wizard
+
+sudo /opt/aws/amazon-cloudwatch-agent/bin/amazon-cloudwatch-agent-config-wizard
+
+Purpose:
+Generate configuration.
+
+---
+
+## Agent Status
+
+sudo /opt/aws/amazon-cloudwatch-agent/bin/amazon-cloudwatch-agent-ctl -a status
+
+Purpose:
+Verify installation.
+
+---
+
+## Check Docker Logs Path
+
+docker inspect $(docker ps -q) | grep LogPath
+
+Purpose:
+Find container logs.
+
+---
+
+## Verify IAM Role
+
+curl http://169.254.169.254/latest/meta-data/iam/security-credentials/
+
+Purpose:
+Verify attached IAM role.
