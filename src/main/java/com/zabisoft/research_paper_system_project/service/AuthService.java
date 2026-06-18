@@ -116,9 +116,6 @@ public class AuthService {
 
         user.setPassword(passwordEncoder.encode(resetPasswordRequest.getPassword()));
         userRepository.save(user);
-
-
-
         stringRedisTemplate.delete(resetKey);
         refreshTokenRepository.deleteByEmail(user.getEmail());
 
