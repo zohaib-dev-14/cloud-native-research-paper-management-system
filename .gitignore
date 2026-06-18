@@ -35,3 +35,4 @@ build/
 *.jar
 .env
 *.p12
+docker-compose.dev.yml
