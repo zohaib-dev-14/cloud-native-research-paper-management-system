@@ -6,6 +6,26 @@ The project was built to explore how modern backend systems work in real product
 
 ---
 
+## 🎥 Live Demo
+
+Watch the 1-minute deployment and feature walkthrough:
+
+https://www.linkedin.com/posts/muhammadzohaib14_java-springboot-backenddevelopment-ugcPost-7466385008337981441-ZNuQ/
+
+The demo showcases:
+
+* User Registration & OTP Verification
+* JWT Authentication & Refresh Token Rotation
+* Role-Based Access Control (RBAC)
+* Research Paper Submission Workflow
+* AWS Cloud Deployment
+* Redis Integration
+* PostgreSQL on AWS RDS
+* Docker & Nginx Setup
+* CI/CD Pipeline
+
+---
+
 # 🌐 Live Production Demo
 
 ## Swagger API Documentation
