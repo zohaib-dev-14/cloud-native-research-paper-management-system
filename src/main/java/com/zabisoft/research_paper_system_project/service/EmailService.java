@@ -42,50 +42,7 @@ public class EmailService {
 
     private static @NonNull Content getContent(String otp) {
         String htmlContent = """
-<html>
-<body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333;">
-
-    <h2 style="color: #2c3e50;">
-        <b>Research Paper System</b>
-    </h2>
-
-    <p>Hello,</p>
-
-    <p>Your One-Time Password (OTP) for verification is:</p>
-
-    <div style="
-        font-size: 32px;
-        font-weight: bold;
-        color: #2563eb;
-        letter-spacing: 5px;
-        margin: 20px 0;
-    ">
-        %s
-    </div>
-
-    <p>
-        This OTP will expire in <b>5 minutes</b>.
-    </p>
-
-    <p>
-        For your security:
-    </p>
-
-    <ul>
-        <li>Do not share this OTP with anyone</li>
-        <li>Our team will never ask for your OTP</li>
-        <li>If you did not request this code, please ignore this email and report</li>
-    </ul>
-
-    <br>
-
-    <p>
-        Regards,<br>
-        <b>Research Paper System Team</b>
-    </p>
-
-</body>
-</html>
+<!-- Header --> <tr> <td align="center" style=" background:#2563eb; padding:35px; color:white; "> <h1 style=" margin:0; font-size:28px; font-weight:bold; "> Research Paper System </h1> <p style=" margin-top:10px; font-size:15px; opacity:0.9; "> Secure Account Verification </p> </td> </tr> <!-- Content --> <tr> <td style="padding:40px;"> <h2 style=" color:#1e293b; margin-top:0; "> Verify Your Identity </h2> <p style=" color:#475569; font-size:15px; line-height:1.7; "> Hello, </p> <p style=" color:#475569; font-size:15px; line-height:1.7; "> We received a request to verify your account. Please use the One-Time Password (OTP) below to continue. </p> <!-- OTP BOX --> <div style=" text-align:center; margin:35px 0; "> <div style=" display:inline-block; background:#eff6ff; border:2px dashed #2563eb; border-radius:12px; padding:20px 35px; font-size:36px; font-weight:bold; letter-spacing:8px; color:#2563eb; "> %s </div> </div> <p style=" color:#475569; font-size:15px; text-align:center; "> This OTP will expire in <strong style="color:#dc2626;">5 minutes</strong> </p> <!-- Security Box --> <div style=" background:#fff7ed; border-left:5px solid #f97316; border-radius:8px; padding:18px; margin-top:30px; "> <h3 style=" margin-top:0; color:#c2410c; font-size:16px; "> Security Reminder </h3> <ul style=" color:#7c2d12; padding-left:20px; margin-bottom:0; "> <li>Never share this OTP with anyone.</li> <li>Our team will never ask for your OTP.</li> <li>If you did not request this verification, ignore this email.</li> </ul> </div> <p style=" margin-top:35px; color:#475569; font-size:15px; line-height:1.7; "> Thank you for using <strong>Research Paper System</strong>. </p> <p style=" color:#475569; font-size:15px; "> Regards,<br> <strong>Research Paper System Team</strong> </p> </td> </tr> <!-- Footer --> <tr> <td align="center" style=" background:#f8fafc; border-top:1px solid #e2e8f0; padding:25px; "> <p style=" margin:0; color:#64748b; font-size:13px; "> © 2026 Research Paper System </p> <p style=" margin-top:8px; color:#94a3b8; font-size:12px; "> Secure • Reliable • Scalable </p> </td> </tr>
 """.formatted(otp);
 
         Content content = new Content("text/html", htmlContent);
