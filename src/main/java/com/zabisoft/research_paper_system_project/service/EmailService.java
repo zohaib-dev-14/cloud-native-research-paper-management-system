@@ -54,10 +54,11 @@ public class EmailService {
 <!DOCTYPE html>
 <html>
 <body style="margin:0;padding:0;background:#f1f5f9;font-family:Arial,sans-serif;">
-<table width="100%" cellpadding="0" cellspacing="0">
+<table width="100%%" cellpadding="0" cellspacing="0">
   <tr>
     <td align="center" style="padding:40px 20px;">
-      <table width="600" cellpadding="0" cellspacing="0" style="background:white;border-radius:16px;overflow:hidden;box-shadow:0 4px 24px rgba(0,0,0,0.08);">
+      <table width="600" cellpadding="0" cellspacing="0"
+             style="background:white;border-radius:16px;overflow:hidden;box-shadow:0 4px 24px rgba(0,0,0,0.08);">
 
         <!-- Header -->
         <tr>
@@ -77,9 +78,11 @@ public class EmailService {
             <h2 style="color:#1e293b;margin-top:0;">
               Password Reset Successful
             </h2>
+
             <p style="color:#475569;font-size:15px;line-height:1.7;">
-              Hello, <strong> %s </strong>
+              Hello, <strong>%s</strong>
             </p>
+
             <p style="color:#475569;font-size:15px;line-height:1.7;">
               Your password for <strong>Research Paper System</strong> has been
               successfully reset. You can now log in with your new password.
@@ -87,10 +90,14 @@ public class EmailService {
 
             <!-- Success Box -->
             <div style="text-align:center;margin:35px 0;">
-              <div style="display:inline-block;background:#f0fdf4;border:2px solid #16a34a;border-radius:12px;padding:20px 35px;">
+              <div style="display:inline-block;background:#f0fdf4;
+                          border:2px solid #16a34a;border-radius:12px;
+                          padding:20px 35px;">
+
                 <p style="margin:0;font-size:18px;font-weight:bold;color:#16a34a;">
                   ✓ &nbsp; Password Updated Successfully
                 </p>
+
                 <p style="margin:8px 0 0;font-size:13px;color:#15803d;">
                   Your account is secure and ready to use.
                 </p>
@@ -98,11 +105,16 @@ public class EmailService {
             </div>
 
             <!-- Warning Box -->
-            <div style="background:#fff7ed;border-left:5px solid #f97316;border-radius:8px;padding:18px;margin-top:30px;">
+            <div style="background:#fff7ed;border-left:5px solid #f97316;
+                        border-radius:8px;padding:18px;margin-top:30px;">
+
               <h3 style="margin-top:0;color:#c2410c;font-size:16px;">
                 Wasn't You?
               </h3>
-              <ul style="color:#7c2d12;padding-left:20px;margin-bottom:0;font-size:14px;line-height:1.8;">
+
+              <ul style="color:#7c2d12;padding-left:20px;
+                         margin-bottom:0;font-size:14px;line-height:1.8;">
+
                 <li>If you did not request this password reset, your account may be compromised.</li>
                 <li>Contact our support team immediately.</li>
                 <li>Consider changing your password again from a secure device.</li>
@@ -112,6 +124,7 @@ public class EmailService {
             <p style="margin-top:35px;color:#475569;font-size:15px;line-height:1.7;">
               Thank you for using <strong>Research Paper System</strong>.
             </p>
+
             <p style="color:#475569;font-size:15px;">
               Regards,<br>
               <strong>Research Paper System Team</strong>
@@ -121,10 +134,13 @@ public class EmailService {
 
         <!-- Footer -->
         <tr>
-          <td align="center" style="background:#f8fafc;border-top:1px solid #e2e8f0;padding:25px;">
+          <td align="center"
+              style="background:#f8fafc;border-top:1px solid #e2e8f0;padding:25px;">
+
             <p style="margin:0;color:#64748b;font-size:13px;">
               © 2026 Research Paper System
             </p>
+
             <p style="margin-top:8px;color:#94a3b8;font-size:12px;">
               Secure • Reliable • Scalable
             </p>
