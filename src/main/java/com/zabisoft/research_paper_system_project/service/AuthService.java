@@ -33,6 +33,7 @@ public class AuthService {
     private final StringRedisTemplate stringRedisTemplate;
     private final PasswordEncoder passwordEncoder;
     private final RefreshTokenRepository refreshTokenRepository;
+    private final EmailService emailService;
 
     public GenericApiResponse register(RegisterRequest request) {
 
@@ -118,6 +119,8 @@ public class AuthService {
         userRepository.save(user);
         stringRedisTemplate.delete(resetKey);
         refreshTokenRepository.deleteByEmail(user.getEmail());
+
+        emailService.sendResetConfirmation(user.getEmail());
 
         return new GenericApiResponse(
                 true,
