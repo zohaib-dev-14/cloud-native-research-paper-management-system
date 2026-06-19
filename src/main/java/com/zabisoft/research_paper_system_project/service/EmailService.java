@@ -49,8 +49,8 @@ public class EmailService {
         return content;
     }
 
-    private static @NonNull Content getResetContent() {
-        String htmlContent = """
+    private static @NonNull Content getResetContent(String username) {
+        String htmlContent = String.format("""
 <!DOCTYPE html>
 <html>
 <body style="margin:0;padding:0;background:#f1f5f9;font-family:Arial,sans-serif;">
@@ -78,7 +78,7 @@ public class EmailService {
               Password Reset Successful
             </h2>
             <p style="color:#475569;font-size:15px;line-height:1.7;">
-              Hello,
+              Hello, <strong> %s </strong>
             </p>
             <p style="color:#475569;font-size:15px;line-height:1.7;">
               Your password for <strong>Research Paper System</strong> has been
@@ -137,20 +137,20 @@ public class EmailService {
 </table>
 </body>
 </html>
-""";
+""", username);
         Content content = new Content("text/html", htmlContent);
         return content;
 
     }
 
 
-    public void sendResetConfirmation(String toEmail) {
+    public void sendResetConfirmation(String toEmail, String username) {
         Email from = new Email("no-reply@researchpaper.site", "Research Paper System");
         Email to = new Email(toEmail);
 
         String subject = "Research Paper System - OTP Verification";
 
-        Content content = getResetContent();
+        Content content = getResetContent(username);
 
         Mail mail = new Mail(from, subject, to, content);
         SendGrid sg = new SendGrid(sendGridApiKey);

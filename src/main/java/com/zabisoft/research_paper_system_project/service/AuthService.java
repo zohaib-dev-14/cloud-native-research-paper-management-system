@@ -120,7 +120,7 @@ public class AuthService {
         stringRedisTemplate.delete(resetKey);
         refreshTokenRepository.deleteByEmail(user.getEmail());
 
-        emailService.sendResetConfirmation(user.getEmail());
+        emailService.sendResetConfirmation(user.getEmail(), user.getName());
 
         return new GenericApiResponse(
                 true,
