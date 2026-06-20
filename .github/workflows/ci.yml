@@ -36,10 +36,12 @@ jobs:
           password: ${{ secrets.DOCKER_PASSWORD }}
 
       - name: Build Docker Image
-        run: docker build -t zohaibsaraj/research-app:v1 .
+        run: docker build -t zohaibsaraj/research-app:${{ github.sha }} -t zohaibsaraj/research-app:latest .
 
       - name: Push Docker Image
-        run: docker push zohaibsaraj/research-app:v1
+        run: |
+          docker push zohaibsaraj/research-app:${{ github.sha }}
+          docker push zohaibsaraj/research-app:latest
 
 
 
