@@ -35,7 +35,14 @@ jobs:
             echo "==============================="
 
             git pull origin main
+            
+            echo "==============================="
+            echo "CLEANUP UNUSED IMAGES"
+            echo "==============================="
 
+            sudo docker image prune -f
+            
+            
             echo "==============================="
             echo "STOPPING OLD CONTAINERS"
             echo "==============================="
@@ -65,12 +72,6 @@ jobs:
             echo "==============================="
 
             sudo docker logs springboot-app --tail 50
-
-            echo "==============================="
-            echo "CLEANUP UNUSED IMAGES"
-            echo "==============================="
-
-            sudo docker image prune -f
 
             echo "==============================="
             echo "DEPLOYMENT FINISHED"
