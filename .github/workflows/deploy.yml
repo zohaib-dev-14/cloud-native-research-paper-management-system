@@ -46,7 +46,7 @@ jobs:
             echo "PULLING LATEST DOCKER IMAGE"
             echo "==============================="
 
-            sudo docker pull zohaibsaraj/research-app:latest
+            sudo docker pull zohaibsaraj/research-app:${{github.sha}}
 
             echo "==============================="
             echo "STARTING CONTAINERS"
