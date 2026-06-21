@@ -1,10 +1,9 @@
 package com.zabisoft.research_paper_system_project.service;
-import com.zabisoft.research_paper_system_project.dto.PendingRegistration;
-import com.zabisoft.research_paper_system_project.dto.RegisterRequest;
-import com.zabisoft.research_paper_system_project.dto.SendOTPRequest;
+import com.zabisoft.research_paper_system_project.dto.*;
+
 import static com.zabisoft.research_paper_system_project.helper.KeyHelper.*;
 import static com.zabisoft.research_paper_system_project.util.OTPGeneration.generateOTP;
-import com.zabisoft.research_paper_system_project.dto.VerifyOTPRequest;
+
 import com.zabisoft.research_paper_system_project.enums.OTPType;
 import com.zabisoft.research_paper_system_project.repositories.UserRepository;
 import com.zabisoft.research_paper_system_project.response.GenericApiResponse;
@@ -75,12 +74,12 @@ public class OTPService {
         );
     }
 
-    public GenericApiResponse forgotPasswordOTP(SendOTPRequest sendOTPRequest) {
-        if (!userRepository.existsByEmail(sendOTPRequest.getEmail())) {
+    public GenericApiResponse forgotPasswordOTP(SendForgetPasswordOTP sendForgetPasswordOTP) {
+        if (!userRepository.existsByEmail(sendForgetPasswordOTP.getEmail())) {
             throw new RuntimeException("User doesn't exist");
         }
-        sendOTPRequest.setOtpType(OTPType.FORGOT_PASSWORD);
-        sendOTP(sendOTPRequest);
+        sendForgetPasswordOTP.setOtpType(OTPType.FORGOT_PASSWORD);
+        sendForgetPassword(sendForgetPasswordOTP);
         return new GenericApiResponse(
                 true,
                 "OTP sent successfully"
@@ -108,6 +107,22 @@ public class OTPService {
                 true,
                 "OTP verified successfully"
         );
+    }
+
+    public void sendForgetPassword(SendForgetPasswordOTP sendForgetPasswordOTP) {
+        String key = otpKey(sendForgetPasswordOTP.getEmail(), sendForgetPasswordOTP.getOtpType());
+
+        // check existing otp
+        String existingOTP = stringRedisTemplate.opsForValue().get(key);
+
+        if (existingOTP != null) {
+            emailService.sendOtp(sendForgetPasswordOTP.getEmail(), existingOTP);
+            return;
+        }
+
+        String otp = generateOTP();
+        stringRedisTemplate.opsForValue().setIfAbsent(key, otp, Duration.ofMinutes(5));
+        emailService.sendOtp(sendForgetPasswordOTP.getEmail(), otp);
     }
     public void sendOTP(SendOTPRequest sendOTPRequest) {
         String key = otpKey(sendOTPRequest.getEmail(), sendOTPRequest.getOtpType());

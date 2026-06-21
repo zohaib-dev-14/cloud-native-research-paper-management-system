@@ -1,6 +1,7 @@
 package com.zabisoft.research_paper_system_project.controller;
 
 
+import com.zabisoft.research_paper_system_project.dto.SendForgetPasswordOTP;
 import com.zabisoft.research_paper_system_project.dto.SendOTPRequest;
 import com.zabisoft.research_paper_system_project.dto.VerifyOTPRequest;
 import com.zabisoft.research_paper_system_project.response.GenericApiResponse;
@@ -41,9 +42,9 @@ public class OTPController {
             summary = "Forgot Password",
             description = "Sends OTP for password recovery."
     )
-    public ResponseEntity<GenericApiResponse> forgotPasswordOTP(@Valid @RequestBody SendOTPRequest sendOTPRequest) {
+    public ResponseEntity<GenericApiResponse> forgotPasswordOTP(@Valid @RequestBody SendForgetPasswordOTP sendForgetPasswordOTPRequest) {
         return ResponseEntity.status(200).body(
-                otpService.forgotPasswordOTP(sendOTPRequest)
+                otpService.forgotPasswordOTP(sendForgetPasswordOTPRequest)
         );
     }
 
