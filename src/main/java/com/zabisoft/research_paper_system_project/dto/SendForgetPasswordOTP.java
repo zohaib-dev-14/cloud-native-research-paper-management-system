@@ -1,5 +1,6 @@
 package com.zabisoft.research_paper_system_project.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.zabisoft.research_paper_system_project.enums.OTPType;
 
@@ -23,6 +24,4 @@ public class SendForgetPasswordOTP {
     @Size(max = 30, message = "Email too long")
 
     private String email;
-    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
-    private OTPType otpType = OTPType.FORGOT_PASSWORD;
 }

@@ -78,7 +78,6 @@ public class OTPService {
         if (!userRepository.existsByEmail(sendForgetPasswordOTP.getEmail())) {
             throw new RuntimeException("User doesn't exist");
         }
-        sendForgetPasswordOTP.setOtpType(OTPType.FORGOT_PASSWORD);
         sendForgetPassword(sendForgetPasswordOTP);
         return new GenericApiResponse(
                 true,
@@ -110,13 +109,13 @@ public class OTPService {
     }
 
     public void sendForgetPassword(SendForgetPasswordOTP sendForgetPasswordOTP) {
-        String key = otpKey(sendForgetPasswordOTP.getEmail(), sendForgetPasswordOTP.getOtpType());
+        String key = otpKey(sendForgetPasswordOTP.getEmail(), OTPType.FORGOT_PASSWORD);
 
         // check existing otp
-        String existingOTP = stringRedisTemplate.opsForValue().get(key);
+        String existingForgotOTP = stringRedisTemplate.opsForValue().get(key);
 
-        if (existingOTP != null) {
-            emailService.sendOtp(sendForgetPasswordOTP.getEmail(), existingOTP);
+        if (existingForgotOTP != null) {
+            emailService.sendOtp(sendForgetPasswordOTP.getEmail(), existingForgotOTP);
             return;
         }
 
