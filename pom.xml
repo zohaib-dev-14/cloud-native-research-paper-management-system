@@ -123,6 +123,12 @@
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
+            <version>4.1.0</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-sendgrid</artifactId>
             <version>4.1.0</version>
             <scope>compile</scope>
@@ -149,6 +155,9 @@
     </dependencies>
 
     <build>
+        <finalName>
+            app
+        </finalName>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>

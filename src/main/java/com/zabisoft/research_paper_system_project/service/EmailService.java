@@ -27,6 +27,10 @@ public class EmailService {
 
         Content content = getContent(otp);
 
+        extractMail(from, to, subject, content);
+    }
+
+    private void extractMail(Email from, Email to, String subject, Content content) {
         Mail mail = new Mail(from, subject, to, content);
         SendGrid sg = new SendGrid(sendGridApiKey);
         Request request = new Request();
@@ -168,17 +172,7 @@ public class EmailService {
 
         Content content = getResetContent(username);
 
-        Mail mail = new Mail(from, subject, to, content);
-        SendGrid sg = new SendGrid(sendGridApiKey);
-        Request request = new Request();
-        try {
-            request.setMethod(Method.POST);
-            request.setEndpoint("mail/send");
-            request.setBody(mail.build());
-            Response response = sg.api(request);
-        } catch (IOException ex) {
-            throw new RuntimeException(ex.getMessage());
-        }
+        extractMail(from, to, subject, content);
     }
 
 }
