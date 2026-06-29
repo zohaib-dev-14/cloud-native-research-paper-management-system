@@ -47,6 +47,7 @@ public class SecurityConfig {
                                 .requestMatchers("/api/v1/reviews/**")
                                 .hasAnyRole("REVIEWER", "ADMIN")
 
+
                                 .requestMatchers(
                                         "/api/v1/papers/**",
                                         "/api/v1/papers/my/**"
@@ -67,7 +68,8 @@ public class SecurityConfig {
                                         "/logo.svg",
                                         "/images/**",
                                         "/css/**",
-                                        "/js/**"
+                                        "/js/**",
+                                        "/actuator/health"
                                 ).permitAll()
                                 .anyRequest().authenticated()
                 )
