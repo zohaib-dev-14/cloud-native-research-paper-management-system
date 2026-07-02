@@ -16,7 +16,9 @@ public class CorsConfig {
                 registry.addMapping("/**")
                         .allowedOrigins(
                                 "http://localhost:5173",
-                                "https://researchpaper.site"
+                                "https://researchpaper.site",
+                                "http://nginx:80",
+                                "https://app.researchpaper.site"
                         )
                         .allowedMethods("*")
                         .allowedHeaders("*")
