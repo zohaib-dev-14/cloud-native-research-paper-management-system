@@ -30,11 +30,11 @@ jobs:
 
             cd ~/research-paper-system-springboot
 
-            echo "==============================="
-            echo "PULLING LATEST GITHUB CODE"
-            echo "==============================="
-
-            git pull origin main
+#            echo "==============================="
+#            echo "PULLING LATEST GITHUB CODE"
+#            echo "==============================="
+#
+#            git pull origin main
             
             echo "==============================="
             echo "CLEANUP UNUSED IMAGES"
