@@ -28,13 +28,13 @@ jobs:
             echo "CONNECTED TO EC2 SERVER"
             echo "==============================="
 
-            cd ~/research-paper-system-springboot
+            cd ~/cloud-native-research-paper-management-system
 
-#            echo "==============================="
-#            echo "PULLING LATEST GITHUB CODE"
-#            echo "==============================="
-#
-#            git pull origin main
+            echo "==============================="
+            echo "PULLING LATEST GITHUB CODE"
+            echo "==============================="
+
+            git pull origin main
             
             echo "==============================="
             echo "CLEANUP UNUSED IMAGES"
