@@ -9,6 +9,8 @@ import io.swagger.v3.oas.models.servers.Server;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import java.util.List;
+
 @Configuration
 public class SwaggerConfig {
 
@@ -35,6 +37,6 @@ public class SwaggerConfig {
                                         .scheme("bearer")
                                         .bearerFormat("JWT")
                         )
-                );
+                ).servers(List.of(new Server().url("https://app.researchpaper.site").description("Production Server")));
     }
 }
