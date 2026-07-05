@@ -5,6 +5,7 @@ import static com.zabisoft.research_paper_system_project.helper.KeyHelper.*;
 import static com.zabisoft.research_paper_system_project.util.OTPGeneration.generateOTP;
 
 import com.zabisoft.research_paper_system_project.enums.OTPType;
+import com.zabisoft.research_paper_system_project.interfaces.EmailService;
 import com.zabisoft.research_paper_system_project.repositories.UserRepository;
 import com.zabisoft.research_paper_system_project.response.GenericApiResponse;
 import lombok.RequiredArgsConstructor;

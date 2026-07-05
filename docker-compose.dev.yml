@@ -1,45 +1,61 @@
 services:
   app:
     build: .
-    image: research-app:v1
+    image: research-app:latest
     container_name: springboot-app
+
 
     ports:
       - "8080:8080"
+    env_file:
+        - .env
     environment:
+      SPRING_DATASOURCE_URL: ${DB_URL}
+      SPRING_DATASOURCE_USERNAME: ${DB_USERNAME}
+      SPRING_DATASOURCE_PASSWORD: ${DB_PASSWORD}
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+      SPRING_JPA_SHOW_SQL: true
+      SPRING_JPA_PROPERTIES_HIBERNATE_FORMAT_SQL: true
+      SPRING_DATASOURCE_DRIVER_CLASS_NAME: org.postgresql.Driver
+      SPRING_PROFILES_ACTIVE: local
+      REVIEWER_NAME: ${REVIEWER_NAME}
+      REVIEWER_EMAIL: ${REVIEWER_EMAIL}
+      REVIEWER_PASSWORD: ${REVIEWER_PASSWORD}
 
-        - SPRING_DATASOURCE_URL=${DB_URL}
-        - SPRING_DATASOURCE_USERNAME=${DB_USERNAME}
-        - SPRING_DATASOURCE_PASSWORD=${DB_PASSWORD}
-        - SPRING_JPA_HIBERNATE_DDL-AUTO=update
-        - SPRING_JPA_SHOW_SQL=true
-        - SPRING_JPA_PROPERTIES_HIBERNATE_FORMAT_SQL=true
-        - REVIEWER_NAME=${REVIEWER_NAME}
-        - REVIEWER_EMAIL=${REVIEWER_EMAIL}
-        - REVIEWER_PASSWORD=${REVIEWER_PASSWORD}
+      SPRING_DATA_REDIS_HOST: ${REDIS_HOST}
+      SPRING_DATA_REDIS_PORT: ${REDIS_PORT}
+      SPRING_DATA_REDIS_PASSWORD: ${REDIS_PASSWORD}
 
-        - SPRING_DATA_REDIS_HOST=${SPRING_DATA_REDIS_HOST}
-        - SPRING_DATA_REDIS_PORT=${REDIS_PORT}
-        - JWT_SECRET=${SECRET_KEY}
-        - SPRING_SENDGRID_API_KEY=${SENDGRID_API_KEY}
-        - SPRING_SENDGRID_PROXY_HOST=${SENDGRID_PROXY_HOST}
-        - SERVER_FORWARD_HEADERS_STRATEGY=FRAMEWORK
-#        - MINIO_ROOT_USER=${MINIO_ROOT_USER}
-#        - MINIO_ROOT_PASSWORD=${MINIO_ROOT_PASSWORD}
-#        - MINIO_BUCKET_NAME=${MINIO_BUCKET_NAME}
-#        - MINIO_URL=${MINIO_URL}
+      JWT_SECRET: ${SECRET_KEY}
 
+      SPRING_MAIL_HOST: ${SPRING_MAIL_HOST}
+      SPRING_MAIL_PORT: ${SPRING_MAIL_PORT}
+      SPRING_MAIL_USERNAME: ${SPRING_MAIL_USERNAME}
+      SPRING_MAIL_PASSWORD: ${SPRING_MAIL_PASSWORD}
 
-    depends_on:
-      postgres:
-        condition: service_healthy
+      MINIO_ROOT_USER: ${MINIO_ROOT_USER}
+      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD}
+      MINIO_BUCKET_NAME: ${MINIO_BUCKET_NAME}
+      MINIO_URL: ${MINIO_URL}
 
-      redis:
-        condition: service_healthy
-    volumes:
-      - ./src:/app/src
-
+    healthcheck:
+      test: "curl --fail --silent localhost:8080/actuator/health/readiness | grep UP || exit 1"
+      interval: 20s
+      timeout: 3s
+      retries: 3
+      start_period: 10s
     restart: always
+
+#    depends_on:
+#      postgres:
+#        condition: service_healthy
+#
+#      redis:
+#        condition: service_healthy
+#    volumes:
+#      - ./src:/app/src
+
+
 
 #  nginx:
 #    image: nginx:latest
@@ -52,28 +68,28 @@ services:
 #      - app
 #    restart: always
 
-  postgres:
-    image: postgres:16
-    container_name: postgres-db
-
-    environment:
-      - POSTGRES_DB=${DB_NAME}
-      - POSTGRES_USER=${DB_USERNAME}
-      - POSTGRES_PASSWORD=${DB_PASSWORD}
-
-    ports:
-      - "5433:5432"
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U postgres"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
-    restart: always
+#  postgres:
+#    image: postgres:16
+#    container_name: postgres-db
+#
+#    environment:
+#      - POSTGRES_DB=${DB_NAME}
+#      - POSTGRES_USER=${DB_USERNAME}
+#      - POSTGRES_PASSWORD=${DB_PASSWORD}
+#
+#    ports:
+#      - "5433:5432"
+#    volumes:
+#      - postgres_data:/var/lib/postgresql/data
+#    healthcheck:
+#      test: ["CMD-SHELL", "pg_isready -U postgres"]
+#      interval: 10s
+#      timeout: 5s
+#      retries: 5
+#    restart: always
 
   minio:
-    image: minio/minio
+    image: minio/minio:latest
     container_name: minio_storage
     ports:
       - "9000:9000"
@@ -95,27 +111,28 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
+    depends_on:
+      - app
     restart: always
 
-  redis:
-    image: redis:7
-    container_name: redis-cache
-    ports:
-      - "6379:6379"
-    volumes:
-      - redis_data:/data
-    healthcheck:
-      test: ["CMD", "redis-cli", "ping"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
+#  redis:
+#    image: redis:7
+#    container_name: redis-cache
+#    ports:
+#      - "6378:6379"
+#    volumes:
+#      - redis_data:/data
+#    healthcheck:
+#      test: ["CMD", "redis-cli", "ping"]
+#      interval: 10s
+#      timeout: 5s
+#      retries: 5
+#
+#    restart: always
 
-    restart: always
 
-    env_file:
-      - .env
 
 volumes:
-  redis_data:
+#  redis_data:
   minio_data:
-  postgres_data:
+#  postgres_data:

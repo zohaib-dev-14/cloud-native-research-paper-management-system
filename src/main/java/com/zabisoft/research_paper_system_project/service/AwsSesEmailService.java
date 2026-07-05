@@ -15,7 +15,7 @@ package com.zabisoft.research_paper_system_project.service;
 //import java.io.IOException;
 
 //@Service
-//public class EmailService {
+//public class AwsSesEmailService {
 //    @Value("${spring.sendgrid.api-key}")
 //     private String sendGridApiKey;
 //
@@ -178,16 +178,19 @@ package com.zabisoft.research_paper_system_project.service;
 //}
 
 
+import com.zabisoft.research_paper_system_project.interfaces.EmailService;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 import software.amazon.awssdk.services.sesv2.SesV2Client;
 import software.amazon.awssdk.services.sesv2.model.*;
 
 
-@Service
+//@Service
+@Profile("aws-config")
 @RequiredArgsConstructor
-public class EmailService {
+public class AwsSesEmailService implements EmailService {
 
     private final SesV2Client sesV2Client;
 

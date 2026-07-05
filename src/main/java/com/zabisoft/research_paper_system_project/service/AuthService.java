@@ -3,6 +3,7 @@ import com.zabisoft.research_paper_system_project.dto.*;
 import com.zabisoft.research_paper_system_project.entities.RefreshToken;
 import com.zabisoft.research_paper_system_project.entities.User;
 import com.zabisoft.research_paper_system_project.enums.Role;
+import com.zabisoft.research_paper_system_project.interfaces.EmailService;
 import com.zabisoft.research_paper_system_project.repositories.RefreshTokenRepository;
 import com.zabisoft.research_paper_system_project.repositories.UserRepository;
 import com.zabisoft.research_paper_system_project.response.GenericApiResponse;

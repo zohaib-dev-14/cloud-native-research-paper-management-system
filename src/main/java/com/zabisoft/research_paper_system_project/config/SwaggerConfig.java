@@ -37,6 +37,8 @@ public class SwaggerConfig {
                                         .scheme("bearer")
                                         .bearerFormat("JWT")
                         )
-                ).servers(List.of(new Server().url("https://app.researchpaper.site").description("Production Server")));
+                ).servers(List.of(
+                        new Server().url("http://localhost:8080").description("Local Server"),
+                        new Server().url("https://app.researchpaper.site").description("Production Server")));
     }
 }

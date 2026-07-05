@@ -1,14 +1,11 @@
 package com.zabisoft.research_paper_system_project.service.fileStorageImplementation;
 
-import com.zabisoft.research_paper_system_project.config.S3Config;
 import com.zabisoft.research_paper_system_project.exception.FileStorageException;
 import com.zabisoft.research_paper_system_project.exception.InvalidFileException;
 import com.zabisoft.research_paper_system_project.interfaces.FileStorageService;
-import io.minio.MinioClient;
-import io.minio.PutObjectArgs;
-import io.minio.RemoveObjectArgs;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import software.amazon.awssdk.core.sync.RequestBody;
@@ -23,7 +20,8 @@ import static com.zabisoft.research_paper_system_project.util.FileConstants.MAX_
 
 @Service
 @RequiredArgsConstructor
-public class FileStorageServiceImpl
+@Profile("prod")
+public class AwsS3StorageService
         implements FileStorageService {
 
 //    private final MinioClient minioClient;
@@ -160,7 +158,7 @@ public class FileStorageServiceImpl
 //import static com.zabisoft.research_paper_system_project.util.FileConstants.UPLOAD_DIR;
 //
 //@Service
-//public class FileStorageServiceImpl implements FileStorageService {
+//public class AwsS3StorageService implements FileStorageService {
 //
 //    @Override
 //    public String storeFile(MultipartFile multipartFile) {

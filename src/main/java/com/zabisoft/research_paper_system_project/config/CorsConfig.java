@@ -20,6 +20,7 @@ public class CorsConfig {
                                 "https://researchpaper.site",
                                 "http://nginx:80",
                                 "https://app.researchpaper.site"
+
                         )
                         .allowedMethods("*")
                         .allowedHeaders("*")
