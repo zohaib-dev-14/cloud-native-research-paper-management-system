@@ -10,7 +10,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.StringRedisTemplate;
 
 @Configuration
-@Profile("local")
+@Profile("prod")
 public class RedisProdConfig {
     @Bean
     LettuceClientConfigurationBuilderCustomizer sslCustomizer() {
