@@ -10,6 +10,7 @@ import org.springframework.mail.javamail.JavaMailSenderImpl;
 import java.util.Properties;
 
 @Configuration
+@Profile("prod")
 public class LocalMailConfig {
     @Value("${SPRING_MAIL_HOST}")
     private String mailHost;

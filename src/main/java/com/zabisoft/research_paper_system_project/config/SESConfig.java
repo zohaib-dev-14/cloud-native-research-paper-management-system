@@ -8,8 +8,8 @@ import org.springframework.context.annotation.Profile;
 import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.sesv2.SesV2Client;
 
-@Configuration
-@Profile("aws-service")
+//@Configuration
+//@Profile("aws-service")
 public class SESConfig {
 
 

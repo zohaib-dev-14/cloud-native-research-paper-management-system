@@ -188,7 +188,7 @@ import software.amazon.awssdk.services.sesv2.model.*;
 
 
 //@Service
-@Profile("aws-config")
+//@Profile("aws-config")
 @RequiredArgsConstructor
 public class AwsSesEmailService implements EmailService {
 

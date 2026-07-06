@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
+@Profile("prod")
 public class BrevoEmailService implements EmailService {
 
     private final JavaMailSender mailSender; // Brevo SMTP settings auto-injected
