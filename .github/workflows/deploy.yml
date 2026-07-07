@@ -29,14 +29,8 @@ jobs:
             echo "CONNECTED TO EC2 SERVER"
             echo "==============================="
 
-            cd ~/cloud-native-research-paper-management-system
+            cd ~/scholarflow-prod
 
-            echo "==============================="
-            echo "PULLING LATEST GITHUB CODE"
-            echo "==============================="
-
-            git pull origin main
-            
             echo "==============================="
             echo "CLEANUP UNUSED IMAGES"
             echo "==============================="
