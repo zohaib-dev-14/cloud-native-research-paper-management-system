@@ -15,15 +15,15 @@ jobs:
     steps:
      
       - name: Deploy to EC2 Server
-        uses: appleboy/ssh-action@v1.0.3
-        with:
+#        uses: appleboy/ssh-action@v1.0.3
+#        with:
 
-          host: ${{ secrets.EC2_HOST }}
-          username: ec2-user
-          key: ${{ secrets.EC2_KEY }}
-          port: 22
+#          host: ${{ secrets.EC2_HOST }}
+#          username: ec2-user
+#          key: ${{ secrets.EC2_KEY }}
+#          port: 22
 
-          script: |
+        run: |
 
             echo "==============================="
             echo "CONNECTED TO EC2 SERVER"
